@@ -57,6 +57,46 @@ describe('Binary search tree', function () {
       assert.isNull(bst.right.right);
     });
 
+    it("Recursive insertion on the left works", function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'some data');
+      bst.insert(7, 'some other data');
+      bst.insert(1, 'hello');
+      bst.insert(9, 'world');
+
+      bst.checkIsBST();
+      assert.isNull(bst.right);
+      bst.left.key.should.equal(7);
+      _.isEqual(bst.left.data, ['some other data']).should.equal(true);
+
+      bst.left.left.key.should.equal(1);
+      _.isEqual(bst.left.left.data, ['hello']).should.equal(true);
+
+      bst.left.right.key.should.equal(9);
+      _.isEqual(bst.left.right.data, ['world']).should.equal(true);
+    });
+
+    it("Recursive insertion on the right works", function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'some data');
+      bst.insert(17, 'some other data');
+      bst.insert(11, 'hello');
+      bst.insert(19, 'world');
+
+      bst.checkIsBST();
+      assert.isNull(bst.left);
+      bst.right.key.should.equal(17);
+      _.isEqual(bst.right.data, ['some other data']).should.equal(true);
+
+      bst.right.left.key.should.equal(11);
+      _.isEqual(bst.right.left.data, ['hello']).should.equal(true);
+
+      bst.right.right.key.should.equal(19);
+      _.isEqual(bst.right.right.data, ['world']).should.equal(true);
+    });
+
   });
 
 });
