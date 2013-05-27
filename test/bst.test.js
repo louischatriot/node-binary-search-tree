@@ -2,6 +2,7 @@ var should = require('chai').should()
   , assert = require('chai').assert
   , BinarySearchTree = require('../lib/bst')
   , _ = require('underscore')
+  , customUtils = require('../lib/customUtils')
   ;
 
 
@@ -133,6 +134,16 @@ describe('Binary search tree', function () {
       bst.checkIsBST();
       bst.right.key.should.equal(12);
       _.isEqual(bst.right.data, ['a']).should.equal(true);
+    });
+
+    it('Can insert a lot of keys and still get a BST (sanity check)', function () {
+      var bst = new BinarySearchTree({ unique: true });
+
+      customUtils.getRandomArray(100).forEach(function (n) {
+        bst.insert(n, 'some data');
+      });
+
+      bst.checkIsBST();
     });
 
   });
