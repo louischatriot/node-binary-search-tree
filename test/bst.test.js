@@ -168,6 +168,20 @@ describe('Binary search tree', function () {
       bst.checkIsBST();
     });
 
+    it('All children get a pointer to their parent, the root doesnt', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'root');
+      bst.insert(5, 'yes');
+      bst.insert(15, 'no');
+
+      bst.checkIsBST();
+
+      assert.isNull(bst.parent);
+      bst.left.parent.should.equal(bst);
+      bst.right.parent.should.equal(bst);
+    });
+
   });   // ==== End of 'Insertion' ==== //
 
 
