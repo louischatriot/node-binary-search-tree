@@ -97,6 +97,44 @@ describe('Binary search tree', function () {
       _.isEqual(bst.right.right.data, ['world']).should.equal(true);
     });
 
+    it('If uniqueness constraint not enforced, we can insert different data for same key', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'some data');
+      bst.insert(3, 'hello');
+      bst.insert(3, 'world');
+
+      bst.checkIsBST();
+      bst.left.key.should.equal(3);
+      _.isEqual(bst.left.data, ['hello', 'world']).should.equal(true);
+
+      bst.insert(12, 'a');
+      bst.insert(12, 'b');
+
+      bst.checkIsBST();
+      bst.right.key.should.equal(12);
+      _.isEqual(bst.right.data, ['a', 'b']).should.equal(true);
+    });
+
+    it('If uniqueness constraint is enforced, we cannot insert different data for same key', function () {
+      var bst = new BinarySearchTree({ unique: true });
+
+      bst.insert(10, 'some data');
+      bst.insert(3, 'hello');
+      (function () { bst.insert(3, 'world'); }).should.throw();
+
+      bst.checkIsBST();
+      bst.left.key.should.equal(3);
+      _.isEqual(bst.left.data, ['hello']).should.equal(true);
+
+      bst.insert(12, 'a');
+      (function () { bst.insert(12, 'b'); }).should.throw();
+
+      bst.checkIsBST();
+      bst.right.key.should.equal(12);
+      _.isEqual(bst.right.data, ['a']).should.equal(true);
+    });
+
   });
 
 });
