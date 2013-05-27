@@ -136,6 +136,28 @@ describe('Binary search tree', function () {
       _.isEqual(bst.right.data, ['a']).should.equal(true);
     });
 
+    it('Can insert 0 or the empty string', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(0, 'some data');
+
+      bst.checkIsBST();
+      bst.key.should.equal(0);
+      _.isEqual(bst.data, ['some data']).should.equal(true);
+      assert.isNull(bst.left);
+      assert.isNull(bst.right);
+
+      bst = new BinarySearchTree();
+
+      bst.insert('', 'some other data');
+
+      bst.checkIsBST();
+      bst.key.should.equal('');
+      _.isEqual(bst.data, ['some other data']).should.equal(true);
+      assert.isNull(bst.left);
+      assert.isNull(bst.right);
+    });
+
     it('Can insert a lot of keys and still get a BST (sanity check)', function () {
       var bst = new BinarySearchTree({ unique: true });
 
@@ -146,6 +168,44 @@ describe('Binary search tree', function () {
       bst.checkIsBST();
     });
 
-  });
+  });   // ==== End of 'Insertion' ==== //
+
+
+  describe('Search', function () {
+
+    it('Can find data in a BST', function () {
+      var bst = new BinarySearchTree()
+        , i;
+
+      customUtils.getRandomArray(100).forEach(function (n) {
+        bst.insert(n, 'some data for ' + n);
+      });
+
+      bst.checkIsBST();
+
+      for (i = 0; i < 100; i += 1) {
+        _.isEqual(bst.search(i), ['some data for ' + i]).should.equal(true);
+      }
+    });
+
+    it('If no data can be found, return an empty array', function () {
+      var bst = new BinarySearchTree();
+
+      customUtils.getRandomArray(100).forEach(function (n) {
+        if (n !== 63) {
+          bst.insert(n, 'some data for ' + n);
+        }
+      });
+
+      bst.checkIsBST();
+
+      bst.search(-2).length.should.equal(0);
+      bst.search(100).length.should.equal(0);
+      bst.search(101).length.should.equal(0);
+      bst.search(63).length.should.equal(0);
+    });
+
+
+  });   /// ==== End of 'Search' ==== //
 
 });
