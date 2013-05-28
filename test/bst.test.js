@@ -547,6 +547,22 @@ describe('Binary search tree', function () {
       checkOnlyOneWasRemoved(15);
     });
 
+    it('Can delete the root if it has 2 children', function () {
+      var bst;
+
+      bst = new BinarySearchTree();
+      [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
+        bst.insert(k, 'some ' + k);
+      });
+      bst.delete(10);
+      bst.checkIsBST();
+      [5, 3, 8, 15, 12, 37].forEach(function (k) {
+        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+      });
+      bst.search(10).length.should.equal(0);
+
+    });
+
   });   // ==== End of 'Deletion' ==== //
 
 });
