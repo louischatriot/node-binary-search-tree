@@ -39,5 +39,46 @@ bst.search(1);    // Equal to []
 // Deleting all the data relating to a key
 bst.delete(15);   // bst.search(15) will now give []
 bst.delete(18, 'world');   // bst.search(18) will now give ['hello']
-// Delete
 ```
+
+There are three optional parameters you can pass the BST constructor, allowing you to enforce a key-uniqueness constraint, use a custom function to compare keys and use a custom function to check whether values are equal. These parameters are all passed in an object.
+
+```javascript
+// Uniqueness
+var bst = new BinarySearchTree({ unique: true });
+bst.insert(10, 'hello');
+bst.insert(10, 'world');   // Will throw an error
+
+// Custom key comparison function
+// It needs to return a negative number if a is less than b,
+// a positive number if a is greater than b
+// and 0 if they are equal
+// If none is provided, the default one can compare numbers, dates and strings
+// which are the most common usecases
+function compareKeys (a, b) {
+  if (a.age < b.age) { return -1; }
+  if (a.age > b.age) { return 1; }
+  
+  return 0;
+}
+
+// Now we can use objects with an 'age' property as keys
+var bst = new BinarySearchTree({ compareKeys: compareKeys });
+bst.insert({ age: 23 }, 'Mark');
+bst.insert({ age: 47 }, 'Franck');
+
+// Custom value equality checking function used when we try to just delete one piece of data
+// Returns true if a and b are considered the same, false otherwise
+// The default function is able to compare numbers and strings
+function checkValueEquality (a, b) {
+  return a.length === b.length;
+}
+var bst = new BinarySearchTree({ checkValueEquality: checkValueEquality });
+bst.insert(10, 'hello');
+bst.insert(10, 'world');
+bst.insert(10, 'howdoyoudo');
+
+bst.delete(10, 'abcde');
+bst.search(10);   // Returns ['howdoyoudo']
+```
+
