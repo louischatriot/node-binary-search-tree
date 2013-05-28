@@ -635,6 +635,74 @@ describe('Binary search tree', function () {
       bst.search(15).length.should.equal(0);
     });
 
+    it('If no value is provided, it will delete the entire node even if there are multiple pieces of data', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'yes');
+      bst.insert(5, 'hello');
+      bst.insert(3, 'yes');
+      bst.insert(5, 'world');
+      bst.insert(8, 'yes');
+
+      assert.deepEqual(bst.search(5), ['hello', 'world']);
+      bst.getNumberOfKeys().should.equal(4);
+
+      bst.delete(5);
+      bst.search(5).length.should.equal(0);
+      bst.getNumberOfKeys().should.equal(3);
+    });
+
+    it('Can remove only one value from an array', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'yes');
+      bst.insert(5, 'hello');
+      bst.insert(3, 'yes');
+      bst.insert(5, 'world');
+      bst.insert(8, 'yes');
+
+      assert.deepEqual(bst.search(5), ['hello', 'world']);
+      bst.getNumberOfKeys().should.equal(4);
+
+      bst.delete(5, 'hello');
+      assert.deepEqual(bst.search(5), ['world']);
+      bst.getNumberOfKeys().should.equal(4);
+    });
+
+    it('Removes nothing if value doesnt match', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'yes');
+      bst.insert(5, 'hello');
+      bst.insert(3, 'yes');
+      bst.insert(5, 'world');
+      bst.insert(8, 'yes');
+
+      assert.deepEqual(bst.search(5), ['hello', 'world']);
+      bst.getNumberOfKeys().should.equal(4);
+
+      bst.delete(5, 'nope');
+      assert.deepEqual(bst.search(5), ['hello', 'world']);
+      bst.getNumberOfKeys().should.equal(4);
+    });
+
+    it('If value provided but node contains only one value, remove entire node', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'yes');
+      bst.insert(5, 'hello');
+      bst.insert(3, 'yes2');
+      bst.insert(5, 'world');
+      bst.insert(8, 'yes3');
+
+      assert.deepEqual(bst.search(3), ['yes2']);
+      bst.getNumberOfKeys().should.equal(4);
+
+      bst.delete(3, 'yes2');
+      bst.search(3).length.should.equal(0);
+      bst.getNumberOfKeys().should.equal(3);
+    });
+
   });   // ==== End of 'Deletion' ==== //
 
 });
