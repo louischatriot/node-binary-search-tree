@@ -490,28 +490,29 @@ describe('Binary search tree', function () {
     it('Able to delete the root if it has only one child', function () {
       var bst;
 
-      function recreateBst () {
-        bst = new BinarySearchTree();
-
-        [10, 5, 3, 6].forEach(function (k) {
-          bst.insert(k, 'some ' + k);
-        });
-      }
-
-      function checkOnlyOneWasRemoved (theRemoved) {
-        [10, 5, 3, 6].forEach(function (k) {
-          if (k === theRemoved) {
-            bst.search(k).length.should.equal(0);
-          } else {
-            _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
-          }
-        });
-      }
-
-      recreateBst();
+      // Root has only one child, on the left
+      bst = new BinarySearchTree();
+      [10, 5, 3, 6].forEach(function (k) {
+        bst.insert(k, 'some ' + k);
+      });
       bst.delete(10);
       bst.checkIsBST();
-      checkOnlyOneWasRemoved(10);
+      [5, 3, 6].forEach(function (k) {
+        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+      });
+      bst.search(10).length.should.equal(0);
+
+      // Root has only one child, on the right
+      bst = new BinarySearchTree();
+      [10, 15, 13, 16].forEach(function (k) {
+        bst.insert(k, 'some ' + k);
+      });
+      bst.delete(10);
+      bst.checkIsBST();
+      [15, 13, 16].forEach(function (k) {
+        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+      });
+      bst.search(10).length.should.equal(0);
     });
 
     it('Able to delete non root nodes that have only one child', function () {
