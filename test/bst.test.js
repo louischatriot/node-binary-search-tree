@@ -170,6 +170,26 @@ describe('Binary search tree', function () {
       t.checkInternalPointers();
     });
 
+    it('Can get the number of inserted keys', function () {
+      var bst = new BinarySearchTree();
+
+      bst.getNumberOfKeys().should.equal(0);
+      bst.insert(10);
+      bst.getNumberOfKeys().should.equal(1);
+      bst.insert(5);
+      bst.getNumberOfKeys().should.equal(2);
+      bst.insert(3);
+      bst.getNumberOfKeys().should.equal(3);
+      bst.insert(8);
+      bst.getNumberOfKeys().should.equal(4);
+      bst.insert(15);
+      bst.getNumberOfKeys().should.equal(5);
+      bst.insert(12);
+      bst.getNumberOfKeys().should.equal(6);
+      bst.insert(37);
+      bst.getNumberOfKeys().should.equal(7);
+    });
+
   });
 
   describe('Insertion', function () {
@@ -384,6 +404,9 @@ describe('Binary search tree', function () {
       var bst = new BinarySearchTree()
         , bstu = new BinarySearchTree({ unique: true });
 
+      bst.getNumberOfKeys().should.equal(0);
+      bstu.getNumberOfKeys().should.equal(0);
+
       bst.delete(5);
       bstu.delete(5);
 
@@ -392,6 +415,9 @@ describe('Binary search tree', function () {
 
       bst.data.length.should.equal(0);
       bstu.data.length.should.equal(0);
+
+      bst.getNumberOfKeys().should.equal(0);
+      bstu.getNumberOfKeys().should.equal(0);
     });
 
     it('Deleting a non-existent key doesnt have any effect', function () {
@@ -408,23 +434,24 @@ describe('Binary search tree', function () {
       }
 
       checkBst();
+      bst.getNumberOfKeys().should.equal(7);
 
       bst.delete(2);
-      checkBst(); bst.checkIsBST();
+      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
       bst.delete(4);
-      checkBst(); bst.checkIsBST();
+      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
       bst.delete(9);
-      checkBst(); bst.checkIsBST();
+      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
       bst.delete(6);
-      checkBst(); bst.checkIsBST();
+      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
       bst.delete(11);
-      checkBst(); bst.checkIsBST();
+      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
       bst.delete(14);
-      checkBst(); bst.checkIsBST();
+      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
       bst.delete(20);
-      checkBst(); bst.checkIsBST();
+      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
       bst.delete(200);
-      checkBst(); bst.checkIsBST();
+      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
     });
 
     it('Able to delete the rootif it is also a leaf', function () {
@@ -433,10 +460,12 @@ describe('Binary search tree', function () {
       bst.insert(10, 'hello');
       bst.key.should.equal(10);
       _.isEqual(bst.data, ['hello']).should.equal(true);
+      bst.getNumberOfKeys().should.equal(1);
 
       bst.delete(10);
       assert.isNull(bst.key);
       bst.data.length.should.equal(0);
+      bst.getNumberOfKeys().should.equal(0);
     });
 
     it('Able to delete leaf nodes that are non-root', function () {
@@ -450,6 +479,8 @@ describe('Binary search tree', function () {
         [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
           bst.insert(k, 'some ' + k);
         });
+
+        bst.getNumberOfKeys().should.equal(7);
       }
 
       function checkOnlyOneWasRemoved (theRemoved) {
@@ -460,6 +491,8 @@ describe('Binary search tree', function () {
             _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
           }
         });
+
+        bst.getNumberOfKeys().should.equal(6);
       }
 
       recreateBst();
@@ -495,8 +528,10 @@ describe('Binary search tree', function () {
       [10, 5, 3, 6].forEach(function (k) {
         bst.insert(k, 'some ' + k);
       });
+      bst.getNumberOfKeys().should.equal(4);
       bst.delete(10);
       bst.checkIsBST();
+      bst.getNumberOfKeys().should.equal(3);
       [5, 3, 6].forEach(function (k) {
         _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
       });
@@ -507,8 +542,10 @@ describe('Binary search tree', function () {
       [10, 15, 13, 16].forEach(function (k) {
         bst.insert(k, 'some ' + k);
       });
+      bst.getNumberOfKeys().should.equal(4);
       bst.delete(10);
       bst.checkIsBST();
+      bst.getNumberOfKeys().should.equal(3);
       [15, 13, 16].forEach(function (k) {
         _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
       });
@@ -524,6 +561,8 @@ describe('Binary search tree', function () {
         [10, 5, 15, 3, 1, 4, 20, 17, 25].forEach(function (k) {
           bst.insert(k, 'some ' + k);
         });
+
+        bst.getNumberOfKeys().should.equal(9);
       }
 
       function checkOnlyOneWasRemoved (theRemoved) {
@@ -534,6 +573,8 @@ describe('Binary search tree', function () {
             _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
           }
         });
+
+        bst.getNumberOfKeys().should.equal(8);
       }
 
       recreateBst();
@@ -554,8 +595,10 @@ describe('Binary search tree', function () {
       [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
         bst.insert(k, 'some ' + k);
       });
+      bst.getNumberOfKeys().should.equal(7);
       bst.delete(10);
       bst.checkIsBST();
+      bst.getNumberOfKeys().should.equal(6);
       [5, 3, 8, 15, 12, 37].forEach(function (k) {
         _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
       });
@@ -569,8 +612,10 @@ describe('Binary search tree', function () {
       [10, 5, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42].forEach(function (k) {
         bst.insert(k, 'some ' + k);
       });
+      bst.getNumberOfKeys().should.equal(15);
       bst.delete(5);
       bst.checkIsBST();
+      bst.getNumberOfKeys().should.equal(14);
       [10, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42].forEach(function (k) {
         _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
       });
@@ -580,8 +625,10 @@ describe('Binary search tree', function () {
       [10, 5, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42].forEach(function (k) {
         bst.insert(k, 'some ' + k);
       });
+      bst.getNumberOfKeys().should.equal(15);
       bst.delete(15);
       bst.checkIsBST();
+      bst.getNumberOfKeys().should.equal(14);
       [10, 5, 3, 1, 4, 8, 6, 9, 12, 11, 13, 20, 19, 42].forEach(function (k) {
         _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
       });
