@@ -86,7 +86,7 @@ describe('Binary search tree', function () {
       t.checkAllNodesFullfillCondition(test);
     });
 
-    it('Can check that a tree is actually a BST', function () {
+    it('Can check that a tree verifies node ordering', function () {
       var t = new BinarySearchTree({ key: 10 })
         , l = new BinarySearchTree({ key: 5 })
         , r = new BinarySearchTree({ key: 15 })
@@ -100,44 +100,74 @@ describe('Binary search tree', function () {
       l.left = ll; l.right = lr;
       r.left = rl; r.right = rr;
 
-      t.checkIsBST();
+      t.checkNodeOrdering();
 
       // Let's be paranoid and check all cases...
       l.key = 12;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       l.key = 5;
 
       r.key = 9;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       r.key = 15;
 
       ll.key = 6;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       ll.key = 11;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       ll.key = 3;
 
       lr.key = 4;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       lr.key = 11;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       lr.key = 8;
 
       rl.key = 16;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       rl.key = 9;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       rl.key = 11;
 
       rr.key = 12;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       rr.key = 7;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       rr.key = 10.5;
-      (function () { t.checkIsBST(); }).should.throw();
+      (function () { t.checkNodeOrdering(); }).should.throw();
       rr.key = 42;
 
-      t.checkIsBST();
+      t.checkNodeOrdering();
+    });
+
+    it('Checking if a tree\'s internal pointers (i.e. parents) are correct', function () {
+      var t = new BinarySearchTree({ key: 10 })
+        , l = new BinarySearchTree({ key: 5 })
+        , r = new BinarySearchTree({ key: 15 })
+        , ll = new BinarySearchTree({ key: 3 })
+        , lr = new BinarySearchTree({ key: 8 })
+        , rl = new BinarySearchTree({ key: 11 })
+        , rr = new BinarySearchTree({ key: 42 })
+        ;
+
+      t.left = l; t.right = r;
+      l.left = ll; l.right = lr;
+      r.left = rl; r.right = rr;
+
+      (function () { t.checkInternalPointers(); }).should.throw();
+      l.parent = t;
+      (function () { t.checkInternalPointers(); }).should.throw();
+      r.parent = t;
+      (function () { t.checkInternalPointers(); }).should.throw();
+      ll.parent = l;
+      (function () { t.checkInternalPointers(); }).should.throw();
+      lr.parent = l;
+      (function () { t.checkInternalPointers(); }).should.throw();
+      rl.parent = r;
+      (function () { t.checkInternalPointers(); }).should.throw();
+      rr.parent = r;
+
+      t.checkInternalPointers();
     });
 
   });
@@ -422,29 +452,98 @@ describe('Binary search tree', function () {
         });
       }
 
+      function checkOnlyOneWasRemoved (theRemoved) {
+        [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
+          if (k === theRemoved) {
+            bst.search(k).length.should.equal(0);
+          } else {
+            _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+          }
+        });
+      }
+
       recreateBst();
       bst.delete(3);
       bst.checkIsBST();
-      bst.search(3).length.should.equal(0);
+      checkOnlyOneWasRemoved(3);
       assert.isNull(bst.left.left);
 
       recreateBst();
       bst.delete(8);
       bst.checkIsBST();
-      bst.search(8).length.should.equal(0);
+      checkOnlyOneWasRemoved(8);
       assert.isNull(bst.left.right);
 
       recreateBst();
       bst.delete(12);
       bst.checkIsBST();
-      bst.search(12).length.should.equal(0);
+      checkOnlyOneWasRemoved(12);
       assert.isNull(bst.right.left);
 
       recreateBst();
       bst.delete(37);
       bst.checkIsBST();
-      bst.search(37).length.should.equal(0);
+      checkOnlyOneWasRemoved(37);
       assert.isNull(bst.right.right);
+    });
+
+    it('Able to delete the root if it has only one child', function () {
+      var bst;
+
+      function recreateBst () {
+        bst = new BinarySearchTree();
+
+        [10, 5, 3, 6].forEach(function (k) {
+          bst.insert(k, 'some ' + k);
+        });
+      }
+
+      function checkOnlyOneWasRemoved (theRemoved) {
+        [10, 5, 3, 6].forEach(function (k) {
+          if (k === theRemoved) {
+            bst.search(k).length.should.equal(0);
+          } else {
+            _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+          }
+        });
+      }
+
+      recreateBst();
+      bst.delete(10);
+      bst.checkIsBST();
+      checkOnlyOneWasRemoved(10);
+    });
+
+    it('Able to delete non root nodes that have only one child', function () {
+      var bst;
+
+      function recreateBst () {
+        bst = new BinarySearchTree();
+
+        [10, 5, 15, 3, 1, 4, 20, 17, 25].forEach(function (k) {
+          bst.insert(k, 'some ' + k);
+        });
+      }
+
+      function checkOnlyOneWasRemoved (theRemoved) {
+        [10, 5, 15, 3, 1, 4, 20, 17, 25].forEach(function (k) {
+          if (k === theRemoved) {
+            bst.search(k).length.should.equal(0);
+          } else {
+            _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+          }
+        });
+      }
+
+      recreateBst();
+      bst.delete(5);
+      bst.checkIsBST();
+      checkOnlyOneWasRemoved(5);
+
+      recreateBst();
+      bst.delete(15);
+      bst.checkIsBST();
+      checkOnlyOneWasRemoved(15);
     });
 
   });   // ==== End of 'Deletion' ==== //
