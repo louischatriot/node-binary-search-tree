@@ -16,6 +16,132 @@ describe('Binary search tree', function () {
     bst.data.length.should.equal(0);
   });
 
+  describe('Sanity checks', function () {
+
+    it('Can get maxkey and minkey descendants', function () {
+      var t = new BinarySearchTree({ key: 10 })
+        , l = new BinarySearchTree({ key: 5 })
+        , r = new BinarySearchTree({ key: 15 })
+        , ll = new BinarySearchTree({ key: 3 })
+        , lr = new BinarySearchTree({ key: 8 })
+        , rl = new BinarySearchTree({ key: 11 })
+        , rr = new BinarySearchTree({ key: 42 })
+        ;
+
+      t.left = l; t.right = r;
+      l.left = ll; l.right = lr;
+      r.left = rl; r.right = rr;
+
+      // Getting min and max key descendants
+      t.getMinKeyDescendant().key.should.equal(3);
+      t.getMaxKeyDescendant().key.should.equal(42);
+
+      t.left.getMinKeyDescendant().key.should.equal(3);
+      t.left.getMaxKeyDescendant().key.should.equal(8);
+
+      t.right.getMinKeyDescendant().key.should.equal(11);
+      t.right.getMaxKeyDescendant().key.should.equal(42);
+
+      t.right.left.getMinKeyDescendant().key.should.equal(11);
+      t.right.left.getMaxKeyDescendant().key.should.equal(11);
+
+      // Getting min and max keys
+      t.getMinKey().should.equal(3);
+      t.getMaxKey().should.equal(42);
+
+      t.left.getMinKey().should.equal(3);
+      t.left.getMaxKey().should.equal(8);
+
+      t.right.getMinKey().should.equal(11);
+      t.right.getMaxKey().should.equal(42);
+
+      t.right.left.getMinKey().should.equal(11);
+      t.right.left.getMaxKey().should.equal(11);
+    });
+
+    it('Can check a condition again every node in a tree', function () {
+      var t = new BinarySearchTree({ key: 10 })
+        , l = new BinarySearchTree({ key: 6 })
+        , r = new BinarySearchTree({ key: 16 })
+        , ll = new BinarySearchTree({ key: 4 })
+        , lr = new BinarySearchTree({ key: 8 })
+        , rl = new BinarySearchTree({ key: 12 })
+        , rr = new BinarySearchTree({ key: 42 })
+        ;
+
+      t.left = l; t.right = r;
+      l.left = ll; l.right = lr;
+      r.left = rl; r.right = rr;
+
+      function test (k, v) { if (k % 2 !== 0) { throw 'Key is not even'; } }
+
+      t.checkAllNodesFullfillCondition(test);
+
+      [l, r, ll, lr, rl, rr].forEach(function (node) {
+        node.key += 1;
+        (function () { t.checkAllNodesFullfillCondition(test); }).should.throw();
+        node.key -= 1;
+      });
+
+      t.checkAllNodesFullfillCondition(test);
+    });
+
+    it('Can check that a tree is actually a BST', function () {
+      var t = new BinarySearchTree({ key: 10 })
+        , l = new BinarySearchTree({ key: 5 })
+        , r = new BinarySearchTree({ key: 15 })
+        , ll = new BinarySearchTree({ key: 3 })
+        , lr = new BinarySearchTree({ key: 8 })
+        , rl = new BinarySearchTree({ key: 11 })
+        , rr = new BinarySearchTree({ key: 42 })
+        ;
+
+      t.left = l; t.right = r;
+      l.left = ll; l.right = lr;
+      r.left = rl; r.right = rr;
+
+      t.checkIsBST();
+
+      // Let's be paranoid and check all cases...
+      l.key = 12;
+      (function () { t.checkIsBST(); }).should.throw();
+      l.key = 5;
+
+      r.key = 9;
+      (function () { t.checkIsBST(); }).should.throw();
+      r.key = 15;
+
+      ll.key = 6;
+      (function () { t.checkIsBST(); }).should.throw();
+      ll.key = 11;
+      (function () { t.checkIsBST(); }).should.throw();
+      ll.key = 3;
+
+      lr.key = 4;
+      (function () { t.checkIsBST(); }).should.throw();
+      lr.key = 11;
+      (function () { t.checkIsBST(); }).should.throw();
+      lr.key = 8;
+
+      rl.key = 16;
+      (function () { t.checkIsBST(); }).should.throw();
+      rl.key = 9;
+      (function () { t.checkIsBST(); }).should.throw();
+      rl.key = 11;
+
+      rr.key = 12;
+      (function () { t.checkIsBST(); }).should.throw();
+      rr.key = 7;
+      (function () { t.checkIsBST(); }).should.throw();
+      rr.key = 10.5;
+      (function () { t.checkIsBST(); }).should.throw();
+      rr.key = 42;
+
+      t.checkIsBST();
+    });
+
+  });
+
   describe('Insertion', function () {
 
     it('Insert at the root if its the first insertion', function () {
@@ -218,7 +344,6 @@ describe('Binary search tree', function () {
       bst.search(101).length.should.equal(0);
       bst.search(63).length.should.equal(0);
     });
-
 
   });   /// ==== End of 'Search' ==== //
 
