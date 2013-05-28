@@ -1,15 +1,16 @@
 {
   "name": "binary-search-tree",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "author": {
     "name": "Louis Chatriot",
     "email": "louis.chatriot@gmail.com"
   },
-  "description": "Node.js implementation of an AVL self-balancing binary search tree",
+  "description": "Different binary search tree implementations, including a self-balancing one (AVL)",
   "keywords": [
     "AVL tree",
     "binary search tree",
-    "self-balancing"
+    "self-balancing",
+    "AVL tree"
   ],
   "homepage": "https://github.com/louischatriot/node-binary-search-tree",
   "repository": {
