@@ -347,4 +347,106 @@ describe('Binary search tree', function () {
 
   });   /// ==== End of 'Search' ==== //
 
+
+  describe('Deletion', function () {
+
+    it('Deletion does nothing on an empty tree', function () {
+      var bst = new BinarySearchTree()
+        , bstu = new BinarySearchTree({ unique: true });
+
+      bst.delete(5);
+      bstu.delete(5);
+
+      assert.isNull(bst.key);
+      assert.isNull(bstu.key);
+
+      bst.data.length.should.equal(0);
+      bstu.data.length.should.equal(0);
+    });
+
+    it('Deleting a non-existent key doesnt have any effect', function () {
+      var bst = new BinarySearchTree();
+
+      [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
+        bst.insert(k, 'some ' + k);
+      });
+
+      function checkBst () {
+        [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
+          _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+        });
+      }
+
+      checkBst();
+
+      bst.delete(2);
+      checkBst(); bst.checkIsBST();
+      bst.delete(4);
+      checkBst(); bst.checkIsBST();
+      bst.delete(9);
+      checkBst(); bst.checkIsBST();
+      bst.delete(6);
+      checkBst(); bst.checkIsBST();
+      bst.delete(11);
+      checkBst(); bst.checkIsBST();
+      bst.delete(14);
+      checkBst(); bst.checkIsBST();
+      bst.delete(20);
+      checkBst(); bst.checkIsBST();
+      bst.delete(200);
+      checkBst(); bst.checkIsBST();
+    });
+
+    it('Able to delete the rootif it is also a leaf', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'hello');
+      bst.key.should.equal(10);
+      _.isEqual(bst.data, ['hello']).should.equal(true);
+
+      bst.delete(10);
+      assert.isNull(bst.key);
+      bst.data.length.should.equal(0);
+    });
+
+    it('Able to delete leaf nodes that are non-root', function () {
+      var bst;
+
+      function recreateBst () {
+        bst = new BinarySearchTree();
+
+        // With this insertion order the tree is well balanced
+        // So we know the leaves are 3, 8, 12, 37
+        [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
+          bst.insert(k, 'some ' + k);
+        });
+      }
+
+      recreateBst();
+      bst.delete(3);
+      bst.checkIsBST();
+      bst.search(3).length.should.equal(0);
+      assert.isNull(bst.left.left);
+
+      recreateBst();
+      bst.delete(8);
+      bst.checkIsBST();
+      bst.search(8).length.should.equal(0);
+      assert.isNull(bst.left.right);
+
+      recreateBst();
+      bst.delete(12);
+      bst.checkIsBST();
+      bst.search(12).length.should.equal(0);
+      assert.isNull(bst.right.left);
+
+      recreateBst();
+      bst.delete(37);
+      bst.checkIsBST();
+      bst.search(37).length.should.equal(0);
+      assert.isNull(bst.right.right);
+    });
+
+  });   // ==== End of 'Deletion' ==== //
+
 });
