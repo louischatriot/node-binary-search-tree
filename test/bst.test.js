@@ -560,7 +560,32 @@ describe('Binary search tree', function () {
         _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
       });
       bst.search(10).length.should.equal(0);
+    });
 
+    it('Can delete a non-root node that has two children', function () {
+      var bst;
+
+      bst = new BinarySearchTree();
+      [10, 5, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42].forEach(function (k) {
+        bst.insert(k, 'some ' + k);
+      });
+      bst.delete(5);
+      bst.checkIsBST();
+      [10, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42].forEach(function (k) {
+        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+      });
+      bst.search(5).length.should.equal(0);
+
+      bst = new BinarySearchTree();
+      [10, 5, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42].forEach(function (k) {
+        bst.insert(k, 'some ' + k);
+      });
+      bst.delete(15);
+      bst.checkIsBST();
+      [10, 5, 3, 1, 4, 8, 6, 9, 12, 11, 13, 20, 19, 42].forEach(function (k) {
+        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+      });
+      bst.search(15).length.should.equal(0);
     });
 
   });   // ==== End of 'Deletion' ==== //
