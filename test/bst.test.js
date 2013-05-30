@@ -298,14 +298,24 @@ describe('Binary search tree', function () {
 
       bst.insert(10, 'some data');
       bst.insert(3, 'hello');
-      (function () { bst.insert(3, 'world'); }).should.throw();
+      try {
+        bst.insert(3, 'world');
+      } catch (e) {
+        e.errorType.should.equal('uniqueViolated');
+        e.key.should.equal(3);
+      }
 
       bst.checkIsBST();
       bst.left.key.should.equal(3);
       _.isEqual(bst.left.data, ['hello']).should.equal(true);
 
       bst.insert(12, 'a');
-      (function () { bst.insert(12, 'b'); }).should.throw();
+      try {
+        bst.insert(12, 'world');
+      } catch (e) {
+        e.errorType.should.equal('uniqueViolated');
+        e.key.should.equal(12);
+      }
 
       bst.checkIsBST();
       bst.right.key.should.equal(12);
