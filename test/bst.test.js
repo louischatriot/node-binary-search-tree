@@ -729,4 +729,33 @@ describe('Binary search tree', function () {
 
   });   // ==== End of 'Deletion' ==== //
 
+
+  describe('Execute on every node (=tree traversal)', function () {
+
+    it('Can execute a function on every node', function () {
+      var bst = new BinarySearchTree()
+        , keys = []
+        , executed = 0
+        ;
+
+      bst.insert(10, 'yes');
+      bst.insert(5, 'hello');
+      bst.insert(3, 'yes2');
+      bst.insert(8, 'yes3');
+      bst.insert(15, 'yes3');
+      bst.insert(159, 'yes3');
+      bst.insert(11, 'yes3');
+
+      bst.executeOnEveryNode(function (node) {
+        keys.push(node.key);
+        executed += 1;
+      });
+
+      assert.deepEqual(keys, [3, 5, 8, 10, 11, 15, 159]);
+      executed.should.equal(7);
+    });
+
+  });   // ==== End of 'Execute on every node' ==== //
+
+
 });
