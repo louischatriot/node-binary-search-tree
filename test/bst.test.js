@@ -722,7 +722,25 @@ describe('Binary search tree', function () {
       bst.getNumberOfKeys().should.equal(3);
 
       bst.delete(10);
+      bst.checkIsBST();
       bst.getNumberOfKeys().should.equal(2);
+      assert.deepEqual(bst.search(5), ['no']);
+      assert.deepEqual(bst.search(15), ['yes']);
+    });
+
+    it('Can remove the root from a tree with height 3 when the root has two children (special case where the two children themselves have children)', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10, 'maybe');
+      bst.insert(5, 'no');
+      bst.insert(15, 'yes');
+      bst.insert(2, 'no');
+      bst.insert(35, 'yes');
+      bst.getNumberOfKeys().should.equal(5);
+
+      bst.delete(10);
+      bst.checkIsBST();
+      bst.getNumberOfKeys().should.equal(4);
       assert.deepEqual(bst.search(5), ['no']);
       assert.deepEqual(bst.search(15), ['yes']);
     });
