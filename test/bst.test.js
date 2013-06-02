@@ -776,4 +776,86 @@ describe('Binary search tree', function () {
   });   // ==== End of 'Execute on every node' ==== //
 
 
+  // This test performs several inserts and deletes at random, always checking the content
+  // of the tree are as expected and the binary search tree constraint is respected
+  // This test is important because it can catch bugs other tests can't
+  // By their nature, BSTs can be hard to test (many possible cases, bug at one operation whose
+  // effect begins to be felt only after several operations etc.)
+  describe('Randomized test (takes much longer than the rest of the test suite)', function () {
+    var bst = new BinarySearchTree()
+      , data = {};
+
+    // Check a bst against a simple key => [data] object
+    function checkDataIsTheSame (bst, data) {
+      var bstDataElems = [];
+
+      // bstDataElems is a simple array containing every piece of data in the tree
+      bst.executeOnEveryNode(function (node) {
+        var i;
+        for (i = 0; i < node.data.length; i += 1) {
+          bstDataElems.push(node.data[i]);
+        }
+      });
+
+      // Number of key and number of pieces of data match
+      bst.getNumberOfKeys().should.equal(Object.keys(data).length);
+      _.reduce(_.map(data, function (d) { return d.length; }), function (memo, n) { return memo + n; }, 0).should.equal(bstDataElems.length);
+
+      // Compare data
+      Object.keys(data).forEach(function (key) {
+        checkDataEquality(bst.search(key), data[key]);
+      });
+    }
+
+    // Check two pieces of data coming from the bst and data are the same
+    function checkDataEquality (fromBst, fromData) {
+      if (fromBst.length === 0) {
+        if (fromData) { fromData.length.should.equal(0); }
+      }
+
+      assert.deepEqual(fromBst, fromData);
+    }
+
+    // Tests the tree structure (deletions concern the whole tree, deletion of some data in a node is well tested above)
+    it('Inserting and deleting entire nodes', function () {
+      // You can skew to be more insertive or deletive, to test all cases
+      function launchRandomTest (nTests, proba) {
+        var i, key, dataPiece, possibleKeys;
+
+        for (i = 0; i < nTests; i += 1) {
+          if (Math.random() > proba) {   // Deletion
+            possibleKeys = Object.keys(data);
+
+            if (possibleKeys.length > 0) {
+              key = possibleKeys[Math.floor(possibleKeys.length * Math.random()).toString()];
+            } else {
+              key = Math.floor(70 * Math.random()).toString();
+            }
+
+            delete data[key];
+            bst.delete(key);
+          } else {   // Insertion
+            key = Math.floor(70 * Math.random()).toString();
+            dataPiece = Math.random().toString().substring(0, 6);
+            bst.insert(key, dataPiece);
+            if (data[key]) {
+              data[key].push(dataPiece);
+            } else {
+              data[key] = [dataPiece];
+            }
+          }
+
+          // Check the bst constraint are still met and the data is correct
+          bst.checkIsBST();
+          checkDataIsTheSame(bst, data);
+        }
+      }
+
+      launchRandomTest(1000, 0.65);
+      launchRandomTest(2000, 0.35);
+    });
+
+  });   // ==== End of 'Randomized test' ==== //
+
+
 });

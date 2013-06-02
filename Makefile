@@ -1,6 +1,6 @@
 test:
 	@echo "Launching tests"
-	@ ./node_modules/.bin/mocha --timeout 2000 --reporter spec
+	@ ./node_modules/.bin/mocha --timeout 10000 --reporter spec
 	@echo "Tests finished"
 
 .PHONY: test
