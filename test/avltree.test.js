@@ -1,12 +1,12 @@
 var should = require('chai').should()
   , assert = require('chai').assert
-  , BinarySearchTree = require('../lib/bst')
+  , BinarySearchTree = require('../lib/avltree')
   , _ = require('underscore')
   , customUtils = require('../lib/customUtils')
   ;
 
 
-describe.skip('Binary search tree', function () {
+describe('AVL tree', function () {
 
   it('Upon creation, left, right and key are null, and data is empty', function () {
     var bst = new BinarySearchTree();
@@ -781,7 +781,7 @@ describe.skip('Binary search tree', function () {
   // This test is important because it can catch bugs other tests can't
   // By their nature, BSTs can be hard to test (many possible cases, bug at one operation whose
   // effect begins to be felt only after several operations etc.)
-  describe('Randomized test (takes much longer than the rest of the test suite)', function () {
+  describe.skip('Randomized test (takes much longer than the rest of the test suite)', function () {
     var bst = new BinarySearchTree()
       , data = {};
 
