@@ -1,6 +1,7 @@
 var should = require('chai').should()
   , assert = require('chai').assert
   , BinarySearchTree = require('../lib/avltree')
+  , AVLTree = require('../lib/avltree')
   , _ = require('underscore')
   , customUtils = require('../lib/customUtils')
   ;
@@ -857,5 +858,97 @@ describe('AVL tree', function () {
 
   });   // ==== End of 'Randomized test' ==== //
 
+});
+
+
+describe.only('Specific to AVL tree', function () {
+
+  it('The root has a height of 1', function () {
+    var avlt = new AVLTree();
+
+    avlt.insert(10, 'root');
+    avlt.height.should.equal(1);
+  });
+
+  it('Newly created children have a height of 1', function () {
+    var avlt = new AVLTree();
+
+    avlt.insert(10, 'root');
+    avlt.createLeftChild({ key: 5, value: 'leftchild' }).height.should.equal(1);
+    avlt.left.height.should.equal(1);
+    avlt.createRightChild({ key: 5, value: 'leftchild' }).height.should.equal(1);
+    avlt.right.height.should.equal(1);
+  });
+
+  it('Checking that all nodes heights are correct', function () {
+    var avlt = new AVLTree({ key: 10 })
+      , l = new AVLTree({ key: 5 })
+      , r = new AVLTree({ key: 15 })
+      , ll = new AVLTree({ key: 3 })
+      , lr = new AVLTree({ key: 8 })
+      , rl = new AVLTree({ key: 13 })
+      , rr = new AVLTree({ key: 18 })
+      , lrl = new AVLTree({ key: 7 })
+      , lrll = new AVLTree({ key: 6 })
+      ;
+
+
+    // With a balanced tree
+    avlt.left = l;
+    avlt.right = r;
+    l.left = ll;
+    l.right = lr;
+    r.left = rl;
+    r.right = rr;
+
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    avlt.height = 1;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    l.height = 1;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    r.height = 1;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    ll.height = 1;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    lr.height = 1;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    rl.height = 1;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    rr.height = 1;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    avlt.height = 2;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    l.height = 2;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    r.height = 2;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    avlt.height = 3;
+    avlt.checkHeightCorrect();   // Correct
+
+    // With an unbalanced tree
+    lr.left = lrl;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    lrl.left = lrll;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    lrl.height = 1;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    lrll.height = 1;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    lrl.height = 2;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    lr.height = 3;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    l.height = 4;
+    (function () { avlt.checkHeightCorrect() }).should.throw();
+    avlt.height = 5;
+    avlt.checkHeightCorrect();   // Correct
+  });
 
 });
+
+
+
+
+
+
+
