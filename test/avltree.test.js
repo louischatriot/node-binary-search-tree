@@ -7,7 +7,7 @@ var should = require('chai').should()
   ;
 
 
-describe('AVL tree', function () {
+describe.skip('AVL tree', function () {
 
   it('Upon creation, left, right and key are null, and data is empty', function () {
     var bst = new BinarySearchTree();
@@ -861,7 +861,7 @@ describe('AVL tree', function () {
 });
 
 
-describe.only('Specific to AVL tree', function () {
+describe('Specific to AVL tree', function () {
 
   it('The root has a height of 1', function () {
     var avlt = new AVLTree();
