@@ -944,6 +944,53 @@ describe('Specific to AVL tree', function () {
     avlt.checkHeightCorrect();   // Correct
   });
 
+  it('Calculate the balance factor', function () {
+    var avlt = new AVLTree({ key: 10 })
+      , l = new AVLTree({ key: 5 })
+      , r = new AVLTree({ key: 15 })
+      , ll = new AVLTree({ key: 3 })
+      , lr = new AVLTree({ key: 8 })
+      , rl = new AVLTree({ key: 13 })
+      , rr = new AVLTree({ key: 18 })
+      , lrl = new AVLTree({ key: 7 })
+      , lrll = new AVLTree({ key: 6 })
+      ;
+
+
+    // With a balanced tree
+    avlt.left = l;
+    avlt.right = r;
+    l.left = ll;
+    l.right = lr;
+    r.left = rl;
+    r.right = rr;
+
+    ll.height = 1;
+    rl.height = 1;
+    rr.height = 1;
+    avlt.height = 2;
+    r.height = 2;
+    lr.left = lrl;
+    lrl.left = lrll;
+    lrl.height = 1;
+    lrll.height = 1;
+    lrl.height = 2;
+    lr.height = 3;
+    l.height = 4;
+    avlt.height = 5;
+    avlt.checkHeightCorrect();   // Correct
+
+    lrll.balanceFactor().should.equal(0);
+    lrl.balanceFactor().should.equal(1);
+    ll.balanceFactor().should.equal(0);
+    lr.balanceFactor().should.equal(2);
+    rl.balanceFactor().should.equal(0);
+    rr.balanceFactor().should.equal(0);
+    l.balanceFactor().should.equal(-2);
+    r.balanceFactor().should.equal(0);
+    avlt.balanceFactor().should.equal(2);
+  });
+
 });
 
 
