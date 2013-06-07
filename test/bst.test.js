@@ -6,7 +6,7 @@ var should = require('chai').should()
   ;
 
 
-describe('Binary search tree', function () {
+describe.only('Binary search tree', function () {
 
   it('Upon creation, left, right and key are null, and data is empty', function () {
     var bst = new BinarySearchTree();
@@ -857,7 +857,7 @@ describe('Binary search tree', function () {
 
   });   // ==== End of 'Randomized test' ==== //
 
-  describe.only('Tree rotations', function () {
+  describe('Tree rotations', function () {
 
     it('Right rotation works when applied from the root and the tree is minimal', function () {
       var bst = new BinarySearchTree();
