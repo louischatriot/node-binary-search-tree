@@ -861,7 +861,7 @@ describe.skip('AVL tree', function () {
 });
 
 
-describe.only('Specific to AVL tree', function () {
+describe('Specific to AVL tree', function () {
 
   it('The root has a height of 1', function () {
     var avlt = new AVLTree();
@@ -1039,6 +1039,195 @@ describe.only('Specific to AVL tree', function () {
     (function () { avlt.checkBalanceFactors(); }).should.throw();
     rl.height = 1;
     avlt.checkBalanceFactors();
+  });
+
+
+  describe.skip('Tree rotations', function () {
+
+    it('Right rotation works when applied from the root and the tree is minimal', function () {
+      var bst = new AVLTree();
+
+      bst.insert(10);
+      bst.insert(5);
+
+      bst.key.should.equal(10);
+      bst.left.key.should.equal(5);
+      assert.isNull(bst.right);
+      assert.isNull(bst.left.left);
+      assert.isNull(bst.left.right);
+      bst = bst.rightRotation();
+      bst.checkIsBST();
+
+      bst.key.should.equal(5);
+      bst.right.key.should.equal(10);
+      assert.isNull(bst.left);
+      assert.isNull(bst.right.left);
+      assert.isNull(bst.right.right);
+    });
+
+    it('Right rotation works when applied from the root and the tree is normal', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10);
+      bst.insert(5);
+      bst.insert(15);
+      bst.insert(3);
+      bst.insert(8);
+
+      bst.key.should.equal(10);
+      bst.left.key.should.equal(5);
+      bst.right.key.should.equal(15);
+      bst.left.left.key.should.equal(3);
+      bst.left.right.key.should.equal(8);
+      bst = bst.rightRotation();
+      bst.checkIsBST();
+
+      bst.key.should.equal(5);
+      bst.left.key.should.equal(3);
+      bst.right.key.should.equal(10);
+      bst.right.left.key.should.equal(8);
+      bst.right.right.key.should.equal(15);
+    });
+
+    it('Right rotation works when applied from an internal node', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10);
+      bst.insert(5);
+      bst.insert(15);
+      bst.insert(3);
+      bst.insert(8);
+      bst.insert(2);
+      bst.insert(4);
+
+      bst.key.should.equal(10);
+      bst.right.key.should.equal(15);
+      bst.left.key.should.equal(5);
+      bst.left.left.key.should.equal(3);
+      bst.left.right.key.should.equal(8);
+      bst.left.left.left.key.should.equal(2);
+      bst.left.left.right.key.should.equal(4);
+      bst.left.rightRotation();
+      bst.checkIsBST();
+
+      bst.key.should.equal(10);
+      bst.right.key.should.equal(15);
+      bst.left.key.should.equal(3);
+      bst.left.left.key.should.equal(2);
+      bst.left.right.key.should.equal(5);
+      bst.left.right.left.key.should.equal(4);
+      bst.left.right.right.key.should.equal(8);
+    });
+
+    it('Left rotation works when applied from the root and the tree is minimal', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10);
+      bst.insert(15);
+
+      bst.key.should.equal(10);
+      bst.right.key.should.equal(15);
+      assert.isNull(bst.left);
+      assert.isNull(bst.right.left);
+      assert.isNull(bst.right.right);
+      bst = bst.leftRotation();
+      bst.checkIsBST();
+
+      bst.key.should.equal(15);
+      bst.left.key.should.equal(10);
+      assert.isNull(bst.right);
+      assert.isNull(bst.left.left);
+      assert.isNull(bst.left.right);
+    });
+
+    it('Left rotation works when applied from the root and the tree is normal', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10);
+      bst.insert(5);
+      bst.insert(15);
+      bst.insert(13);
+      bst.insert(18);
+
+      bst.key.should.equal(10);
+      bst.left.key.should.equal(5);
+      bst.right.key.should.equal(15);
+      bst.right.left.key.should.equal(13);
+      bst.right.right.key.should.equal(18);
+      bst = bst.leftRotation();
+      bst.checkIsBST();
+
+      bst.key.should.equal(15);
+      bst.left.key.should.equal(10);
+      bst.right.key.should.equal(18);
+      bst.left.left.key.should.equal(5);
+      bst.left.right.key.should.equal(13);
+    });
+
+    it('Left rotation works when applied from an internal node', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10);
+      bst.insert(5);
+      bst.insert(15);
+      bst.insert(3);
+      bst.insert(8);
+      bst.insert(6);
+      bst.insert(9);
+
+      bst.key.should.equal(10);
+      bst.right.key.should.equal(15);
+      bst.left.key.should.equal(5);
+      bst.left.left.key.should.equal(3);
+      bst.left.right.key.should.equal(8);
+      bst.left.right.left.key.should.equal(6);
+      bst.left.right.right.key.should.equal(9);
+      bst.left.leftRotation();
+      bst.checkIsBST();
+
+      bst.key.should.equal(10);
+      bst.right.key.should.equal(15);
+      bst.left.key.should.equal(8);
+      bst.left.left.key.should.equal(5);
+      bst.left.right.key.should.equal(9);
+      bst.left.left.left.key.should.equal(3);
+      bst.left.left.right.key.should.equal(6);
+    });
+
+  });   // ==== End of 'Tree rotations' ==== //
+
+  it.only('Auto-balancing insertions', function () {
+    var avlt = new AVLTree();
+
+    console.log();
+
+    avlt.insert(18);
+    avlt.tree.prettyPrint()
+    console.log("===============");
+
+    avlt.insert(15);
+    avlt.tree.prettyPrint()
+    console.log("===============");
+
+    avlt.insert(13);
+    avlt.tree.prettyPrint()
+    console.log("===============");
+
+    avlt.insert(10);
+    avlt.tree.prettyPrint()
+    console.log("===============");
+
+    avlt.insert(8);
+    avlt.tree.prettyPrint()
+    console.log("===============");
+
+    avlt.insert(5);
+    avlt.tree.prettyPrint()
+    console.log("===============");
+
+    avlt.insert(3);
+    avlt.tree.prettyPrint()
+    console.log("===============");
   });
 
 });
