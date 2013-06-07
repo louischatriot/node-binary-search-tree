@@ -353,7 +353,7 @@ describe('AVL tree', function () {
 
   describe('Search', function () {
 
-    it('Can find data in a BST', function () {
+    it('Can find data in an AVLT', function () {
       var avlt = new AVLTree()
         , i;
 
@@ -388,126 +388,124 @@ describe('AVL tree', function () {
   });   /// ==== End of 'Search' ==== //
 
 
-  describe.skip('Deletion', function () {
+  describe('Deletion', function () {
 
     it('Deletion does nothing on an empty tree', function () {
-      var bst = new BinarySearchTree()
-        , bstu = new BinarySearchTree({ unique: true });
+      var avlt = new AVLTree()
+        , avltu = new AVLTree({ unique: true });
 
-      bst.getNumberOfKeys().should.equal(0);
-      bstu.getNumberOfKeys().should.equal(0);
+      avlt.getNumberOfKeys().should.equal(0);
+      avltu.getNumberOfKeys().should.equal(0);
 
-      bst.delete(5);
-      bstu.delete(5);
+      avlt.delete(5);
+      avltu.delete(5);
 
-      assert.isNull(bst.key);
-      assert.isNull(bstu.key);
+      assert.isNull(avlt.tree.key);
+      assert.isNull(avltu.tree.key);
 
-      bst.data.length.should.equal(0);
-      bstu.data.length.should.equal(0);
+      avlt.tree.data.length.should.equal(0);
+      avltu.tree.data.length.should.equal(0);
 
-      bst.getNumberOfKeys().should.equal(0);
-      bstu.getNumberOfKeys().should.equal(0);
+      avlt.getNumberOfKeys().should.equal(0);
+      avltu.getNumberOfKeys().should.equal(0);
     });
 
     it('Deleting a non-existent key doesnt have any effect', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
       [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
-        bst.insert(k, 'some ' + k);
+        avlt.insert(k, 'some ' + k);
       });
 
-      function checkBst () {
+      function checkavlt () {
         [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
-          _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+          _.isEqual(avlt.search(k), ['some ' + k]).should.equal(true);
         });
       }
 
-      checkBst();
-      bst.getNumberOfKeys().should.equal(7);
+      checkavlt();
+      avlt.getNumberOfKeys().should.equal(7);
 
-      bst.delete(2);
-      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
-      bst.delete(4);
-      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
-      bst.delete(9);
-      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
-      bst.delete(6);
-      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
-      bst.delete(11);
-      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
-      bst.delete(14);
-      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
-      bst.delete(20);
-      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
-      bst.delete(200);
-      checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
+      avlt.delete(2);
+      checkavlt(); avlt.checkIsAVLT(); avlt.getNumberOfKeys().should.equal(7);
+      avlt.delete(4);
+      checkavlt(); avlt.checkIsAVLT(); avlt.getNumberOfKeys().should.equal(7);
+      avlt.delete(9);
+      checkavlt(); avlt.checkIsAVLT(); avlt.getNumberOfKeys().should.equal(7);
+      avlt.delete(6);
+      checkavlt(); avlt.checkIsAVLT(); avlt.getNumberOfKeys().should.equal(7);
+      avlt.delete(11);
+      checkavlt(); avlt.checkIsAVLT(); avlt.getNumberOfKeys().should.equal(7);
+      avlt.delete(14);
+      checkavlt(); avlt.checkIsAVLT(); avlt.getNumberOfKeys().should.equal(7);
+      avlt.delete(20);
+      checkavlt(); avlt.checkIsAVLT(); avlt.getNumberOfKeys().should.equal(7);
+      avlt.delete(200);
+      checkavlt(); avlt.checkIsAVLT(); avlt.getNumberOfKeys().should.equal(7);
     });
 
-    it('Able to delete the rootif it is also a leaf', function () {
-      var bst = new BinarySearchTree();
+    it('Able to delete the root if it is also a leaf', function () {
+      var avlt = new AVLTree();
 
-      bst.insert(10, 'hello');
-      bst.key.should.equal(10);
-      _.isEqual(bst.data, ['hello']).should.equal(true);
-      bst.getNumberOfKeys().should.equal(1);
+      avlt.insert(10, 'hello');
+      avlt.tree.key.should.equal(10);
+      _.isEqual(avlt.tree.data, ['hello']).should.equal(true);
+      avlt.getNumberOfKeys().should.equal(1);
 
-      bst.delete(10);
-      assert.isNull(bst.key);
-      bst.data.length.should.equal(0);
-      bst.getNumberOfKeys().should.equal(0);
+      avlt.delete(10);
+      assert.isNull(avlt.tree.key);
+      avlt.tree.data.length.should.equal(0);
+      avlt.getNumberOfKeys().should.equal(0);
     });
 
     it('Able to delete leaf nodes that are non-root', function () {
-      var bst;
+      var avlt;
 
-      function recreateBst () {
-        bst = new BinarySearchTree();
+      function recreateavlt () {
+        avlt = new AVLTree();
 
-        // With this insertion order the tree is well balanced
-        // So we know the leaves are 3, 8, 12, 37
         [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
-          bst.insert(k, 'some ' + k);
+          avlt.insert(k, 'some ' + k);
         });
 
-        bst.getNumberOfKeys().should.equal(7);
+        avlt.getNumberOfKeys().should.equal(7);
       }
 
       function checkOnlyOneWasRemoved (theRemoved) {
         [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
           if (k === theRemoved) {
-            bst.search(k).length.should.equal(0);
+            avlt.search(k).length.should.equal(0);
           } else {
-            _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+            _.isEqual(avlt.search(k), ['some ' + k]).should.equal(true);
           }
         });
 
-        bst.getNumberOfKeys().should.equal(6);
+        avlt.getNumberOfKeys().should.equal(6);
       }
 
-      recreateBst();
-      bst.delete(3);
-      bst.checkIsBST();
+      recreateavlt();
+      avlt.delete(3);
+      avlt.checkIsAVLT();
       checkOnlyOneWasRemoved(3);
-      assert.isNull(bst.left.left);
+      assert.isNull(avlt.left.left);
 
-      recreateBst();
-      bst.delete(8);
-      bst.checkIsBST();
+      recreateavlt();
+      avlt.delete(8);
+      avlt.checkIsAVLT();
       checkOnlyOneWasRemoved(8);
-      assert.isNull(bst.left.right);
+      assert.isNull(avlt.left.right);
 
-      recreateBst();
-      bst.delete(12);
-      bst.checkIsBST();
+      recreateavlt();
+      avlt.delete(12);
+      avlt.checkIsAVLT();
       checkOnlyOneWasRemoved(12);
-      assert.isNull(bst.right.left);
+      assert.isNull(avlt.right.left);
 
-      recreateBst();
-      bst.delete(37);
-      bst.checkIsBST();
+      recreateavlt();
+      avlt.delete(37);
+      avlt.checkIsAVLT();
       checkOnlyOneWasRemoved(37);
-      assert.isNull(bst.right.right);
+      assert.isNull(avlt.right.right);
     });
 
     it('Able to delete the root if it has only one child', function () {
@@ -756,44 +754,89 @@ describe('AVL tree', function () {
   });   // ==== End of 'Execute on every node' ==== //
 
 
+
+  it.only('YUP', function () {
+    var avlt = new AVLTree();
+
+    //avlt.delete(43);
+    //avlt.insert(21);
+    //avlt.insert(29);
+    //avlt.insert(36);
+    //avlt.insert(0);
+    //avlt.insert(38);
+    //avlt.insert(16);
+    //avlt.insert(53);
+    //avlt.delete(29);
+    //avlt.delete(0);
+    //avlt.insert(6);
+    //avlt.insert(48);
+
+
+    avlt.insert(52);
+    avlt.insert(65);
+    avlt.insert(57);
+    avlt.insert(29);
+    avlt.delete(65);
+    avlt.delete(57);
+    console.log("===========================");
+    console.log(avlt.tree);
+    avlt.delete(52);
+    console.log("===========================");
+    console.log(avlt.tree);
+
+
+    avlt.prettyPrint();
+
+    console.log("=====================");
+    //avlt.delete(36);
+
+    console.log("=====================");
+    avlt.prettyPrint();
+    avlt.checkIsAVLT();
+  });
+
+
+
+
+
   // This test performs several inserts and deletes at random, always checking the content
   // of the tree are as expected and the binary search tree constraint is respected
   // This test is important because it can catch bugs other tests can't
   // By their nature, BSTs can be hard to test (many possible cases, bug at one operation whose
   // effect begins to be felt only after several operations etc.)
-  describe.skip('Randomized test (takes much longer than the rest of the test suite)', function () {
-    var bst = new BinarySearchTree()
+  describe('Randomized test (takes much longer than the rest of the test suite)', function () {
+    var avlt = new AVLTree()
       , data = {};
 
-    // Check a bst against a simple key => [data] object
-    function checkDataIsTheSame (bst, data) {
-      var bstDataElems = [];
+    // Check a avlt against a simple key => [data] object
+    function checkDataIsTheSame (avlt, data) {
+      var avltDataElems = [];
 
-      // bstDataElems is a simple array containing every piece of data in the tree
-      bst.executeOnEveryNode(function (node) {
+      // avltDataElems is a simple array containing every piece of data in the tree
+      avlt.executeOnEveryNode(function (node) {
         var i;
         for (i = 0; i < node.data.length; i += 1) {
-          bstDataElems.push(node.data[i]);
+          avltDataElems.push(node.data[i]);
         }
       });
 
       // Number of key and number of pieces of data match
-      bst.getNumberOfKeys().should.equal(Object.keys(data).length);
-      _.reduce(_.map(data, function (d) { return d.length; }), function (memo, n) { return memo + n; }, 0).should.equal(bstDataElems.length);
+      avlt.getNumberOfKeys().should.equal(Object.keys(data).length);
+      _.reduce(_.map(data, function (d) { return d.length; }), function (memo, n) { return memo + n; }, 0).should.equal(avltDataElems.length);
 
       // Compare data
       Object.keys(data).forEach(function (key) {
-        checkDataEquality(bst.search(key), data[key]);
+        checkDataEquality(avlt.search(key), data[key]);
       });
     }
 
-    // Check two pieces of data coming from the bst and data are the same
-    function checkDataEquality (fromBst, fromData) {
-      if (fromBst.length === 0) {
+    // Check two pieces of data coming from the avlt and data are the same
+    function checkDataEquality (fromavlt, fromData) {
+      if (fromavlt.length === 0) {
         if (fromData) { fromData.length.should.equal(0); }
       }
 
-      assert.deepEqual(fromBst, fromData);
+      assert.deepEqual(fromavlt, fromData);
     }
 
     // Tests the tree structure (deletions concern the whole tree, deletion of some data in a node is well tested above)
@@ -812,12 +855,17 @@ describe('AVL tree', function () {
               key = Math.floor(70 * Math.random()).toString();
             }
 
+            console.log("DELETE " + key);
+
             delete data[key];
-            bst.delete(key);
+            avlt.delete(key);
           } else {   // Insertion
             key = Math.floor(70 * Math.random()).toString();
             dataPiece = Math.random().toString().substring(0, 6);
-            bst.insert(key, dataPiece);
+
+            console.log("INSERT " + key);
+
+            avlt.insert(key, dataPiece);
             if (data[key]) {
               data[key].push(dataPiece);
             } else {
@@ -825,9 +873,9 @@ describe('AVL tree', function () {
             }
           }
 
-          // Check the bst constraint are still met and the data is correct
-          bst.checkIsBST();
-          checkDataIsTheSame(bst, data);
+          // Check the avlt constraint are still met and the data is correct
+          avlt.checkIsAVLT();
+          checkDataIsTheSame(avlt, data);
         }
       }
 

@@ -464,7 +464,7 @@ describe.skip('Binary search tree', function () {
       checkBst(); bst.checkIsBST(); bst.getNumberOfKeys().should.equal(7);
     });
 
-    it('Able to delete the rootif it is also a leaf', function () {
+    it('Able to delete the root if it is also a leaf', function () {
       var bst = new BinarySearchTree();
 
       bst.insert(10, 'hello');
