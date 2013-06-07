@@ -1042,22 +1042,82 @@ describe('Specific to AVL tree', function () {
   });
 
   it('Auto-balancing insertions', function () {
-    var avlt = new AVLTree();
+    var avlt = new AVLTree()
+      , avlt2 = new AVLTree()
+      , avlt3 = new AVLTree()
+      ;
 
+    // Balancing insertions on the left
+    avlt.tree.getNumberOfKeys().should.equal(0);
     avlt.insert(18);
+    avlt.tree.getNumberOfKeys().should.equal(1);
     avlt.tree.checkIsBST();
     avlt.insert(15);
+    avlt.tree.getNumberOfKeys().should.equal(2);
     avlt.tree.checkIsBST();
     avlt.insert(13);
+    avlt.tree.getNumberOfKeys().should.equal(3);
     avlt.tree.checkIsBST();
     avlt.insert(10);
+    avlt.tree.getNumberOfKeys().should.equal(4);
     avlt.tree.checkIsBST();
     avlt.insert(8);
+    avlt.tree.getNumberOfKeys().should.equal(5);
     avlt.tree.checkIsBST();
     avlt.insert(5);
+    avlt.tree.getNumberOfKeys().should.equal(6);
     avlt.tree.checkIsBST();
     avlt.insert(3);
+    avlt.tree.getNumberOfKeys().should.equal(7);
     avlt.tree.checkIsBST();
+
+    // Balancing insertions on the right
+    avlt2.tree.getNumberOfKeys().should.equal(0);
+    avlt2.insert(3);
+    avlt2.tree.getNumberOfKeys().should.equal(1);
+    avlt2.tree.checkIsBST();
+    avlt2.insert(5);
+    avlt2.tree.getNumberOfKeys().should.equal(2);
+    avlt2.tree.checkIsBST();
+    avlt2.insert(8);
+    avlt2.tree.getNumberOfKeys().should.equal(3);
+    avlt2.tree.checkIsBST();
+    avlt2.insert(10);
+    avlt2.tree.getNumberOfKeys().should.equal(4);
+    avlt2.tree.checkIsBST();
+    avlt2.insert(13);
+    avlt2.tree.getNumberOfKeys().should.equal(5);
+    avlt2.tree.checkIsBST();
+    avlt2.insert(15);
+    avlt2.tree.getNumberOfKeys().should.equal(6);
+    avlt2.tree.checkIsBST();
+    avlt2.insert(18);
+    avlt2.tree.getNumberOfKeys().should.equal(7);
+    avlt2.tree.checkIsBST();
+
+    // Balancing already-balanced insertions
+    avlt3.tree.getNumberOfKeys().should.equal(0);
+    avlt3.insert(10);
+    avlt3.tree.getNumberOfKeys().should.equal(1);
+    avlt3.tree.checkIsBST();
+    avlt3.insert(5);
+    avlt3.tree.getNumberOfKeys().should.equal(2);
+    avlt3.tree.checkIsBST();
+    avlt3.insert(15);
+    avlt3.tree.getNumberOfKeys().should.equal(3);
+    avlt3.tree.checkIsBST();
+    avlt3.insert(3);
+    avlt3.tree.getNumberOfKeys().should.equal(4);
+    avlt3.tree.checkIsBST();
+    avlt3.insert(8);
+    avlt3.tree.getNumberOfKeys().should.equal(5);
+    avlt3.tree.checkIsBST();
+    avlt3.insert(13);
+    avlt3.tree.getNumberOfKeys().should.equal(6);
+    avlt3.tree.checkIsBST();
+    avlt3.insert(18);
+    avlt3.tree.getNumberOfKeys().should.equal(7);
+    avlt3.tree.checkIsBST();
   });
 
 });
