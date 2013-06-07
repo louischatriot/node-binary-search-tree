@@ -6,7 +6,7 @@ var should = require('chai').should()
   ;
 
 
-describe.skip('Binary search tree', function () {
+describe('Binary search tree', function () {
 
   it('Upon creation, left, right and key are null, and data is empty', function () {
     var bst = new BinarySearchTree();
@@ -856,6 +856,85 @@ describe.skip('Binary search tree', function () {
     });
 
   });   // ==== End of 'Randomized test' ==== //
+
+  describe.only('Tree rotations', function () {
+
+    it('Right rotation works when applied from the root and the tree is minimal', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10);
+      bst.insert(5);
+
+      bst.key.should.equal(10);
+      bst.left.key.should.equal(5);
+      assert.isNull(bst.right);
+      assert.isNull(bst.left.left);
+      assert.isNull(bst.left.right);
+      bst = bst.rightRotation();
+      bst.checkIsBST();
+
+      bst.key.should.equal(5);
+      bst.right.key.should.equal(10);
+      assert.isNull(bst.left);
+      assert.isNull(bst.right.left);
+      assert.isNull(bst.right.right);
+    });
+
+    it('Right rotation works when applied from the root and the tree is normal', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10);
+      bst.insert(5);
+      bst.insert(15);
+      bst.insert(3);
+      bst.insert(8);
+
+      bst.key.should.equal(10);
+      bst.left.key.should.equal(5);
+      bst.right.key.should.equal(15);
+      bst.left.left.key.should.equal(3);
+      bst.left.right.key.should.equal(8);
+      bst = bst.rightRotation();
+      bst.checkIsBST();
+
+      bst.key.should.equal(5);
+      bst.left.key.should.equal(3);
+      bst.right.key.should.equal(10);
+      bst.right.left.key.should.equal(8);
+      bst.right.right.key.should.equal(15);
+    });
+
+    it('Right rotation works when applied from an internal node', function () {
+      var bst = new BinarySearchTree();
+
+      bst.insert(10);
+      bst.insert(5);
+      bst.insert(15);
+      bst.insert(3);
+      bst.insert(8);
+      bst.insert(2);
+      bst.insert(4);
+
+      bst.key.should.equal(10);
+      bst.right.key.should.equal(15);
+      bst.left.key.should.equal(5);
+      bst.left.left.key.should.equal(3);
+      bst.left.right.key.should.equal(8);
+      bst.left.left.left.key.should.equal(2);
+      bst.left.left.right.key.should.equal(4);
+      bst.left.rightRotation();
+      bst.checkIsBST();
+
+      bst.key.should.equal(10);
+      bst.right.key.should.equal(15);
+      bst.left.key.should.equal(3);
+      bst.left.left.key.should.equal(2);
+      bst.left.right.key.should.equal(5);
+      bst.left.right.left.key.should.equal(4);
+      bst.left.right.right.key.should.equal(8);
+    });
+
+  });   // ==== End of 'Tree rotations' ==== //
 
 
 });

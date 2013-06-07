@@ -991,6 +991,7 @@ describe('Specific to AVL tree', function () {
     avlt.balanceFactor().should.equal(2);
   });
 
+
 });
 
 
