@@ -861,7 +861,7 @@ describe.skip('AVL tree', function () {
 });
 
 
-describe('Specific to AVL tree', function () {
+describe.only('Specific to AVL tree', function () {
 
   it('The root has a height of 1', function () {
     var avlt = new AVLTree();
@@ -993,6 +993,53 @@ describe('Specific to AVL tree', function () {
     avlt.balanceFactor().should.equal(2);
   });
 
+  it('Can check that a tree is balanced', function () {
+    var _AVLTree = AVLTree._AVLTree
+      , avlt = new _AVLTree({ key: 10 })
+      , l = new _AVLTree({ key: 5 })
+      , r = new _AVLTree({ key: 15 })
+      , ll = new _AVLTree({ key: 3 })
+      , lr = new _AVLTree({ key: 8 })
+      , rl = new _AVLTree({ key: 13 })
+      , rr = new _AVLTree({ key: 18 })
+
+    avlt.left = l;
+    avlt.right = r;
+    l.left = ll;
+    l.right = lr;
+    r.left = rl;
+    r.right = rr;
+
+    ll.height = 1;
+    lr.height = 1;
+    rl.height = 1;
+    rr.height = 1;
+    l.height = 2;
+    r.height = 2;
+    avlt.height = 3;
+    avlt.checkBalanceFactors();
+
+    r.height = 0;
+    (function () { avlt.checkBalanceFactors(); }).should.throw();
+    r.height = 4;
+    (function () { avlt.checkBalanceFactors(); }).should.throw();
+    r.height = 2;
+    avlt.checkBalanceFactors();
+
+    ll.height = -1;
+    (function () { avlt.checkBalanceFactors(); }).should.throw();
+    ll.height = 3;
+    (function () { avlt.checkBalanceFactors(); }).should.throw();
+    ll.height = 1;
+    avlt.checkBalanceFactors();
+
+    rl.height = -1;
+    (function () { avlt.checkBalanceFactors(); }).should.throw();
+    rl.height = 3;
+    (function () { avlt.checkBalanceFactors(); }).should.throw();
+    rl.height = 1;
+    avlt.checkBalanceFactors();
+  });
 
 });
 
