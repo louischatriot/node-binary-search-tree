@@ -9,14 +9,188 @@ var should = require('chai').should()
 
 describe('AVL tree', function () {
 
-  describe.only('Insertion', function () {
+  describe('Sanity checks', function () {
+
+    it('Checking that all nodes heights are correct', function () {
+      var _AVLTree = AVLTree._AVLTree
+        , avlt = new _AVLTree({ key: 10 })
+        , l = new _AVLTree({ key: 5 })
+        , r = new _AVLTree({ key: 15 })
+        , ll = new _AVLTree({ key: 3 })
+        , lr = new _AVLTree({ key: 8 })
+        , rl = new _AVLTree({ key: 13 })
+        , rr = new _AVLTree({ key: 18 })
+        , lrl = new _AVLTree({ key: 7 })
+        , lrll = new _AVLTree({ key: 6 })
+        ;
+
+
+      // With a balanced tree
+      avlt.left = l;
+      avlt.right = r;
+      l.left = ll;
+      l.right = lr;
+      r.left = rl;
+      r.right = rr;
+
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      avlt.height = 1;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      l.height = 1;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      r.height = 1;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      ll.height = 1;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      lr.height = 1;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      rl.height = 1;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      rr.height = 1;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      avlt.height = 2;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      l.height = 2;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      r.height = 2;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      avlt.height = 3;
+      avlt.checkHeightCorrect();   // Correct
+
+      // With an unbalanced tree
+      lr.left = lrl;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      lrl.left = lrll;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      lrl.height = 1;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      lrll.height = 1;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      lrl.height = 2;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      lr.height = 3;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      l.height = 4;
+      (function () { avlt.checkHeightCorrect() }).should.throw();
+      avlt.height = 5;
+      avlt.checkHeightCorrect();   // Correct
+    });
+
+    it('Calculate the balance factor', function () {
+      var _AVLTree = AVLTree._AVLTree
+        , avlt = new _AVLTree({ key: 10 })
+        , l = new _AVLTree({ key: 5 })
+        , r = new _AVLTree({ key: 15 })
+        , ll = new _AVLTree({ key: 3 })
+        , lr = new _AVLTree({ key: 8 })
+        , rl = new _AVLTree({ key: 13 })
+        , rr = new _AVLTree({ key: 18 })
+        , lrl = new _AVLTree({ key: 7 })
+        , lrll = new _AVLTree({ key: 6 })
+        ;
+
+
+      // With a balanced tree
+      avlt.left = l;
+      avlt.right = r;
+      l.left = ll;
+      l.right = lr;
+      r.left = rl;
+      r.right = rr;
+
+      ll.height = 1;
+      rl.height = 1;
+      rr.height = 1;
+      avlt.height = 2;
+      r.height = 2;
+      lr.left = lrl;
+      lrl.left = lrll;
+      lrl.height = 1;
+      lrll.height = 1;
+      lrl.height = 2;
+      lr.height = 3;
+      l.height = 4;
+      avlt.height = 5;
+      avlt.checkHeightCorrect();   // Correct
+
+      lrll.balanceFactor().should.equal(0);
+      lrl.balanceFactor().should.equal(1);
+      ll.balanceFactor().should.equal(0);
+      lr.balanceFactor().should.equal(2);
+      rl.balanceFactor().should.equal(0);
+      rr.balanceFactor().should.equal(0);
+      l.balanceFactor().should.equal(-2);
+      r.balanceFactor().should.equal(0);
+      avlt.balanceFactor().should.equal(2);
+    });
+
+    it('Can check that a tree is balanced', function () {
+      var _AVLTree = AVLTree._AVLTree
+        , avlt = new _AVLTree({ key: 10 })
+        , l = new _AVLTree({ key: 5 })
+        , r = new _AVLTree({ key: 15 })
+        , ll = new _AVLTree({ key: 3 })
+        , lr = new _AVLTree({ key: 8 })
+        , rl = new _AVLTree({ key: 13 })
+        , rr = new _AVLTree({ key: 18 })
+
+      avlt.left = l;
+      avlt.right = r;
+      l.left = ll;
+      l.right = lr;
+      r.left = rl;
+      r.right = rr;
+
+      ll.height = 1;
+      lr.height = 1;
+      rl.height = 1;
+      rr.height = 1;
+      l.height = 2;
+      r.height = 2;
+      avlt.height = 3;
+      avlt.checkBalanceFactors();
+
+      r.height = 0;
+      (function () { avlt.checkBalanceFactors(); }).should.throw();
+      r.height = 4;
+      (function () { avlt.checkBalanceFactors(); }).should.throw();
+      r.height = 2;
+      avlt.checkBalanceFactors();
+
+      ll.height = -1;
+      (function () { avlt.checkBalanceFactors(); }).should.throw();
+      ll.height = 3;
+      (function () { avlt.checkBalanceFactors(); }).should.throw();
+      ll.height = 1;
+      avlt.checkBalanceFactors();
+
+      rl.height = -1;
+      (function () { avlt.checkBalanceFactors(); }).should.throw();
+      rl.height = 3;
+      (function () { avlt.checkBalanceFactors(); }).should.throw();
+      rl.height = 1;
+      avlt.checkBalanceFactors();
+    });
+
+  });   // ==== End of 'Sanity checks' ==== //
+
+
+  describe('Insertion', function () {
+
+    it('The root has a height of 1', function () {
+      var avlt = new AVLTree();
+
+      avlt.insert(10, 'root');
+      avlt.tree.height.should.equal(1);
+    });
+
 
     it('Insert at the root if its the first insertion', function () {
       var avlt = new AVLTree();
 
       avlt.insert(10, 'some data');
 
-      avlt.checkIsBST();
+      avlt.checkIsAVLT();
       avlt.tree.key.should.equal(10);
       _.isEqual(avlt.tree.data, ['some data']).should.equal(true);
       assert.isNull(avlt.tree.left);
@@ -30,13 +204,13 @@ describe('AVL tree', function () {
       avlt.insert(3, 'hello');
       avlt.insert(3, 'world');
 
-      avlt.checkIsBST();
+      avlt.checkIsAVLT();
       _.isEqual(avlt.search(3), ['hello', 'world']).should.equal(true);
 
       avlt.insert(12, 'a');
       avlt.insert(12, 'b');
 
-      avlt.checkIsBST();
+      avlt.checkIsAVLT();
       _.isEqual(avlt.search(12), ['a', 'b']).should.equal(true);
     });
 
@@ -52,7 +226,7 @@ describe('AVL tree', function () {
         e.key.should.equal(3);
       }
 
-      avlt.checkIsBST();
+      avlt.checkIsAVLT();
       _.isEqual(avlt.search(3), ['hello']).should.equal(true);
 
       avlt.insert(12, 'a');
@@ -63,7 +237,7 @@ describe('AVL tree', function () {
         e.key.should.equal(12);
       }
 
-      avlt.checkIsBST();
+      avlt.checkIsAVLT();
       _.isEqual(avlt.search(12), ['a']).should.equal(true);
     });
 
@@ -72,7 +246,7 @@ describe('AVL tree', function () {
 
       avlt.insert(0, 'some data');
 
-      avlt.checkIsBST();
+      avlt.checkIsAVLT();
       avlt.tree.key.should.equal(0);
       _.isEqual(avlt.tree.data, ['some data']).should.equal(true);
 
@@ -80,7 +254,7 @@ describe('AVL tree', function () {
 
       avlt.insert('', 'some other data');
 
-      avlt.checkIsBST();
+      avlt.checkIsAVLT();
       avlt.tree.key.should.equal('');
       _.isEqual(avlt.tree.data, ['some other data']).should.equal(true);
     });
@@ -95,73 +269,73 @@ describe('AVL tree', function () {
       avlt.tree.getNumberOfKeys().should.equal(0);
       avlt.insert(18);
       avlt.tree.getNumberOfKeys().should.equal(1);
-      avlt.tree.checkIsBST();
+      avlt.tree.checkIsAVLT();
       avlt.insert(15);
       avlt.tree.getNumberOfKeys().should.equal(2);
-      avlt.tree.checkIsBST();
+      avlt.tree.checkIsAVLT();
       avlt.insert(13);
       avlt.tree.getNumberOfKeys().should.equal(3);
-      avlt.tree.checkIsBST();
+      avlt.tree.checkIsAVLT();
       avlt.insert(10);
       avlt.tree.getNumberOfKeys().should.equal(4);
-      avlt.tree.checkIsBST();
+      avlt.tree.checkIsAVLT();
       avlt.insert(8);
       avlt.tree.getNumberOfKeys().should.equal(5);
-      avlt.tree.checkIsBST();
+      avlt.tree.checkIsAVLT();
       avlt.insert(5);
       avlt.tree.getNumberOfKeys().should.equal(6);
-      avlt.tree.checkIsBST();
+      avlt.tree.checkIsAVLT();
       avlt.insert(3);
       avlt.tree.getNumberOfKeys().should.equal(7);
-      avlt.tree.checkIsBST();
+      avlt.tree.checkIsAVLT();
 
       // Balancing insertions on the right
       avlt2.tree.getNumberOfKeys().should.equal(0);
       avlt2.insert(3);
       avlt2.tree.getNumberOfKeys().should.equal(1);
-      avlt2.tree.checkIsBST();
+      avlt2.tree.checkIsAVLT();
       avlt2.insert(5);
       avlt2.tree.getNumberOfKeys().should.equal(2);
-      avlt2.tree.checkIsBST();
+      avlt2.tree.checkIsAVLT();
       avlt2.insert(8);
       avlt2.tree.getNumberOfKeys().should.equal(3);
-      avlt2.tree.checkIsBST();
+      avlt2.tree.checkIsAVLT();
       avlt2.insert(10);
       avlt2.tree.getNumberOfKeys().should.equal(4);
-      avlt2.tree.checkIsBST();
+      avlt2.tree.checkIsAVLT();
       avlt2.insert(13);
       avlt2.tree.getNumberOfKeys().should.equal(5);
-      avlt2.tree.checkIsBST();
+      avlt2.tree.checkIsAVLT();
       avlt2.insert(15);
       avlt2.tree.getNumberOfKeys().should.equal(6);
-      avlt2.tree.checkIsBST();
+      avlt2.tree.checkIsAVLT();
       avlt2.insert(18);
       avlt2.tree.getNumberOfKeys().should.equal(7);
-      avlt2.tree.checkIsBST();
+      avlt2.tree.checkIsAVLT();
 
       // Balancing already-balanced insertions
       avlt3.tree.getNumberOfKeys().should.equal(0);
       avlt3.insert(10);
       avlt3.tree.getNumberOfKeys().should.equal(1);
-      avlt3.tree.checkIsBST();
+      avlt3.tree.checkIsAVLT();
       avlt3.insert(5);
       avlt3.tree.getNumberOfKeys().should.equal(2);
-      avlt3.tree.checkIsBST();
+      avlt3.tree.checkIsAVLT();
       avlt3.insert(15);
       avlt3.tree.getNumberOfKeys().should.equal(3);
-      avlt3.tree.checkIsBST();
+      avlt3.tree.checkIsAVLT();
       avlt3.insert(3);
       avlt3.tree.getNumberOfKeys().should.equal(4);
-      avlt3.tree.checkIsBST();
+      avlt3.tree.checkIsAVLT();
       avlt3.insert(8);
       avlt3.tree.getNumberOfKeys().should.equal(5);
-      avlt3.tree.checkIsBST();
+      avlt3.tree.checkIsAVLT();
       avlt3.insert(13);
       avlt3.tree.getNumberOfKeys().should.equal(6);
-      avlt3.tree.checkIsBST();
+      avlt3.tree.checkIsAVLT();
       avlt3.insert(18);
       avlt3.tree.getNumberOfKeys().should.equal(7);
-      avlt3.tree.checkIsBST();
+      avlt3.tree.checkIsAVLT();
     });
 
     it('Can insert a lot of keys and still get an AVLT (sanity check)', function () {
@@ -169,7 +343,7 @@ describe('AVL tree', function () {
 
       customUtils.getRandomArray(1000).forEach(function (n) {
         avlt.insert(n, 'some data');
-        avlt.checkIsBST();
+        avlt.checkIsAVLT();
       });
 
     });
@@ -180,41 +354,41 @@ describe('AVL tree', function () {
   describe('Search', function () {
 
     it('Can find data in a BST', function () {
-      var bst = new BinarySearchTree()
+      var avlt = new AVLTree()
         , i;
 
       customUtils.getRandomArray(100).forEach(function (n) {
-        bst.insert(n, 'some data for ' + n);
+        avlt.insert(n, 'some data for ' + n);
       });
 
-      bst.checkIsBST();
+      avlt.checkIsAVLT();
 
       for (i = 0; i < 100; i += 1) {
-        _.isEqual(bst.search(i), ['some data for ' + i]).should.equal(true);
+        _.isEqual(avlt.search(i), ['some data for ' + i]).should.equal(true);
       }
     });
 
     it('If no data can be found, return an empty array', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
       customUtils.getRandomArray(100).forEach(function (n) {
         if (n !== 63) {
-          bst.insert(n, 'some data for ' + n);
+          avlt.insert(n, 'some data for ' + n);
         }
       });
 
-      bst.checkIsBST();
+      avlt.checkIsAVLT();
 
-      bst.search(-2).length.should.equal(0);
-      bst.search(100).length.should.equal(0);
-      bst.search(101).length.should.equal(0);
-      bst.search(63).length.should.equal(0);
+      avlt.search(-2).length.should.equal(0);
+      avlt.search(100).length.should.equal(0);
+      avlt.search(101).length.should.equal(0);
+      avlt.search(63).length.should.equal(0);
     });
 
   });   /// ==== End of 'Search' ==== //
 
 
-  describe('Deletion', function () {
+  describe.skip('Deletion', function () {
 
     it('Deletion does nothing on an empty tree', function () {
       var bst = new BinarySearchTree()
@@ -557,20 +731,20 @@ describe('AVL tree', function () {
   describe('Execute on every node (=tree traversal)', function () {
 
     it('Can execute a function on every node', function () {
-      var bst = new BinarySearchTree()
+      var avlt = new AVLTree()
         , keys = []
         , executed = 0
         ;
 
-      bst.insert(10, 'yes');
-      bst.insert(5, 'hello');
-      bst.insert(3, 'yes2');
-      bst.insert(8, 'yes3');
-      bst.insert(15, 'yes3');
-      bst.insert(159, 'yes3');
-      bst.insert(11, 'yes3');
+      avlt.insert(10, 'yes');
+      avlt.insert(5, 'hello');
+      avlt.insert(3, 'yes2');
+      avlt.insert(8, 'yes3');
+      avlt.insert(15, 'yes3');
+      avlt.insert(159, 'yes3');
+      avlt.insert(11, 'yes3');
 
-      bst.executeOnEveryNode(function (node) {
+      avlt.executeOnEveryNode(function (node) {
         keys.push(node.key);
         executed += 1;
       });
@@ -666,188 +840,6 @@ describe('AVL tree', function () {
 });
 
 
-describe('Specific to AVL tree', function () {
-
-  it('The root has a height of 1', function () {
-    var avlt = new AVLTree();
-
-    avlt.insert(10, 'root');
-    avlt.tree.height.should.equal(1);
-  });
-
-  it('Newly created children have a height of 1', function () {
-    var avlt = new AVLTree();
-
-    avlt.insert(10, 'root');
-    avlt.tree.createLeftChild({ key: 5, value: 'leftchild' }).height.should.equal(1);
-    avlt.tree.left.height.should.equal(1);
-    avlt.tree.createRightChild({ key: 5, value: 'leftchild' }).height.should.equal(1);
-    avlt.tree.right.height.should.equal(1);
-  });
-
-  it('Checking that all nodes heights are correct', function () {
-    var _AVLTree = AVLTree._AVLTree
-      , avlt = new _AVLTree({ key: 10 })
-      , l = new _AVLTree({ key: 5 })
-      , r = new _AVLTree({ key: 15 })
-      , ll = new _AVLTree({ key: 3 })
-      , lr = new _AVLTree({ key: 8 })
-      , rl = new _AVLTree({ key: 13 })
-      , rr = new _AVLTree({ key: 18 })
-      , lrl = new _AVLTree({ key: 7 })
-      , lrll = new _AVLTree({ key: 6 })
-      ;
-
-
-    // With a balanced tree
-    avlt.left = l;
-    avlt.right = r;
-    l.left = ll;
-    l.right = lr;
-    r.left = rl;
-    r.right = rr;
-
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    avlt.height = 1;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    l.height = 1;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    r.height = 1;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    ll.height = 1;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    lr.height = 1;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    rl.height = 1;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    rr.height = 1;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    avlt.height = 2;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    l.height = 2;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    r.height = 2;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    avlt.height = 3;
-    avlt.checkHeightCorrect();   // Correct
-
-    // With an unbalanced tree
-    lr.left = lrl;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    lrl.left = lrll;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    lrl.height = 1;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    lrll.height = 1;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    lrl.height = 2;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    lr.height = 3;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    l.height = 4;
-    (function () { avlt.checkHeightCorrect() }).should.throw();
-    avlt.height = 5;
-    avlt.checkHeightCorrect();   // Correct
-  });
-
-  it('Calculate the balance factor', function () {
-    var _AVLTree = AVLTree._AVLTree
-      , avlt = new _AVLTree({ key: 10 })
-      , l = new _AVLTree({ key: 5 })
-      , r = new _AVLTree({ key: 15 })
-      , ll = new _AVLTree({ key: 3 })
-      , lr = new _AVLTree({ key: 8 })
-      , rl = new _AVLTree({ key: 13 })
-      , rr = new _AVLTree({ key: 18 })
-      , lrl = new _AVLTree({ key: 7 })
-      , lrll = new _AVLTree({ key: 6 })
-      ;
-
-
-    // With a balanced tree
-    avlt.left = l;
-    avlt.right = r;
-    l.left = ll;
-    l.right = lr;
-    r.left = rl;
-    r.right = rr;
-
-    ll.height = 1;
-    rl.height = 1;
-    rr.height = 1;
-    avlt.height = 2;
-    r.height = 2;
-    lr.left = lrl;
-    lrl.left = lrll;
-    lrl.height = 1;
-    lrll.height = 1;
-    lrl.height = 2;
-    lr.height = 3;
-    l.height = 4;
-    avlt.height = 5;
-    avlt.checkHeightCorrect();   // Correct
-
-    lrll.balanceFactor().should.equal(0);
-    lrl.balanceFactor().should.equal(1);
-    ll.balanceFactor().should.equal(0);
-    lr.balanceFactor().should.equal(2);
-    rl.balanceFactor().should.equal(0);
-    rr.balanceFactor().should.equal(0);
-    l.balanceFactor().should.equal(-2);
-    r.balanceFactor().should.equal(0);
-    avlt.balanceFactor().should.equal(2);
-  });
-
-  it('Can check that a tree is balanced', function () {
-    var _AVLTree = AVLTree._AVLTree
-      , avlt = new _AVLTree({ key: 10 })
-      , l = new _AVLTree({ key: 5 })
-      , r = new _AVLTree({ key: 15 })
-      , ll = new _AVLTree({ key: 3 })
-      , lr = new _AVLTree({ key: 8 })
-      , rl = new _AVLTree({ key: 13 })
-      , rr = new _AVLTree({ key: 18 })
-
-    avlt.left = l;
-    avlt.right = r;
-    l.left = ll;
-    l.right = lr;
-    r.left = rl;
-    r.right = rr;
-
-    ll.height = 1;
-    lr.height = 1;
-    rl.height = 1;
-    rr.height = 1;
-    l.height = 2;
-    r.height = 2;
-    avlt.height = 3;
-    avlt.checkBalanceFactors();
-
-    r.height = 0;
-    (function () { avlt.checkBalanceFactors(); }).should.throw();
-    r.height = 4;
-    (function () { avlt.checkBalanceFactors(); }).should.throw();
-    r.height = 2;
-    avlt.checkBalanceFactors();
-
-    ll.height = -1;
-    (function () { avlt.checkBalanceFactors(); }).should.throw();
-    ll.height = 3;
-    (function () { avlt.checkBalanceFactors(); }).should.throw();
-    ll.height = 1;
-    avlt.checkBalanceFactors();
-
-    rl.height = -1;
-    (function () { avlt.checkBalanceFactors(); }).should.throw();
-    rl.height = 3;
-    (function () { avlt.checkBalanceFactors(); }).should.throw();
-    rl.height = 1;
-    avlt.checkBalanceFactors();
-  });
-
-
-});
 
 
 
