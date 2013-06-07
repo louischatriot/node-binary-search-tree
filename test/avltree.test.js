@@ -867,29 +867,30 @@ describe('Specific to AVL tree', function () {
     var avlt = new AVLTree();
 
     avlt.insert(10, 'root');
-    avlt.height.should.equal(1);
+    avlt.tree.height.should.equal(1);
   });
 
   it('Newly created children have a height of 1', function () {
     var avlt = new AVLTree();
 
     avlt.insert(10, 'root');
-    avlt.createLeftChild({ key: 5, value: 'leftchild' }).height.should.equal(1);
-    avlt.left.height.should.equal(1);
-    avlt.createRightChild({ key: 5, value: 'leftchild' }).height.should.equal(1);
-    avlt.right.height.should.equal(1);
+    avlt.tree.createLeftChild({ key: 5, value: 'leftchild' }).height.should.equal(1);
+    avlt.tree.left.height.should.equal(1);
+    avlt.tree.createRightChild({ key: 5, value: 'leftchild' }).height.should.equal(1);
+    avlt.tree.right.height.should.equal(1);
   });
 
   it('Checking that all nodes heights are correct', function () {
-    var avlt = new AVLTree({ key: 10 })
-      , l = new AVLTree({ key: 5 })
-      , r = new AVLTree({ key: 15 })
-      , ll = new AVLTree({ key: 3 })
-      , lr = new AVLTree({ key: 8 })
-      , rl = new AVLTree({ key: 13 })
-      , rr = new AVLTree({ key: 18 })
-      , lrl = new AVLTree({ key: 7 })
-      , lrll = new AVLTree({ key: 6 })
+    var _AVLTree = AVLTree._AVLTree
+      , avlt = new _AVLTree({ key: 10 })
+      , l = new _AVLTree({ key: 5 })
+      , r = new _AVLTree({ key: 15 })
+      , ll = new _AVLTree({ key: 3 })
+      , lr = new _AVLTree({ key: 8 })
+      , rl = new _AVLTree({ key: 13 })
+      , rr = new _AVLTree({ key: 18 })
+      , lrl = new _AVLTree({ key: 7 })
+      , lrll = new _AVLTree({ key: 6 })
       ;
 
 
@@ -945,15 +946,16 @@ describe('Specific to AVL tree', function () {
   });
 
   it('Calculate the balance factor', function () {
-    var avlt = new AVLTree({ key: 10 })
-      , l = new AVLTree({ key: 5 })
-      , r = new AVLTree({ key: 15 })
-      , ll = new AVLTree({ key: 3 })
-      , lr = new AVLTree({ key: 8 })
-      , rl = new AVLTree({ key: 13 })
-      , rr = new AVLTree({ key: 18 })
-      , lrl = new AVLTree({ key: 7 })
-      , lrll = new AVLTree({ key: 6 })
+    var _AVLTree = AVLTree._AVLTree
+      , avlt = new _AVLTree({ key: 10 })
+      , l = new _AVLTree({ key: 5 })
+      , r = new _AVLTree({ key: 15 })
+      , ll = new _AVLTree({ key: 3 })
+      , lr = new _AVLTree({ key: 8 })
+      , rl = new _AVLTree({ key: 13 })
+      , rr = new _AVLTree({ key: 18 })
+      , lrl = new _AVLTree({ key: 7 })
+      , lrll = new _AVLTree({ key: 6 })
       ;
 
 
