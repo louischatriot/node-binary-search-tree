@@ -7,366 +7,171 @@ var should = require('chai').should()
   ;
 
 
-describe.skip('AVL tree', function () {
-
-  it('Upon creation, left, right and key are null, and data is empty', function () {
-    var bst = new BinarySearchTree();
-    assert.isNull(bst.left);
-    assert.isNull(bst.right);
-    assert.isNull(bst.key);
-    bst.data.length.should.equal(0);
-  });
-
-  describe('Sanity checks', function () {
-
-    it('Can get maxkey and minkey descendants', function () {
-      var t = new BinarySearchTree({ key: 10 })
-        , l = new BinarySearchTree({ key: 5 })
-        , r = new BinarySearchTree({ key: 15 })
-        , ll = new BinarySearchTree({ key: 3 })
-        , lr = new BinarySearchTree({ key: 8 })
-        , rl = new BinarySearchTree({ key: 11 })
-        , rr = new BinarySearchTree({ key: 42 })
-        ;
-
-      t.left = l; t.right = r;
-      l.left = ll; l.right = lr;
-      r.left = rl; r.right = rr;
-
-      // Getting min and max key descendants
-      t.getMinKeyDescendant().key.should.equal(3);
-      t.getMaxKeyDescendant().key.should.equal(42);
-
-      t.left.getMinKeyDescendant().key.should.equal(3);
-      t.left.getMaxKeyDescendant().key.should.equal(8);
-
-      t.right.getMinKeyDescendant().key.should.equal(11);
-      t.right.getMaxKeyDescendant().key.should.equal(42);
-
-      t.right.left.getMinKeyDescendant().key.should.equal(11);
-      t.right.left.getMaxKeyDescendant().key.should.equal(11);
-
-      // Getting min and max keys
-      t.getMinKey().should.equal(3);
-      t.getMaxKey().should.equal(42);
-
-      t.left.getMinKey().should.equal(3);
-      t.left.getMaxKey().should.equal(8);
-
-      t.right.getMinKey().should.equal(11);
-      t.right.getMaxKey().should.equal(42);
-
-      t.right.left.getMinKey().should.equal(11);
-      t.right.left.getMaxKey().should.equal(11);
-    });
-
-    it('Can check a condition again every node in a tree', function () {
-      var t = new BinarySearchTree({ key: 10 })
-        , l = new BinarySearchTree({ key: 6 })
-        , r = new BinarySearchTree({ key: 16 })
-        , ll = new BinarySearchTree({ key: 4 })
-        , lr = new BinarySearchTree({ key: 8 })
-        , rl = new BinarySearchTree({ key: 12 })
-        , rr = new BinarySearchTree({ key: 42 })
-        ;
-
-      t.left = l; t.right = r;
-      l.left = ll; l.right = lr;
-      r.left = rl; r.right = rr;
-
-      function test (k, v) { if (k % 2 !== 0) { throw 'Key is not even'; } }
-
-      t.checkAllNodesFullfillCondition(test);
-
-      [l, r, ll, lr, rl, rr].forEach(function (node) {
-        node.key += 1;
-        (function () { t.checkAllNodesFullfillCondition(test); }).should.throw();
-        node.key -= 1;
-      });
-
-      t.checkAllNodesFullfillCondition(test);
-    });
-
-    it('Can check that a tree verifies node ordering', function () {
-      var t = new BinarySearchTree({ key: 10 })
-        , l = new BinarySearchTree({ key: 5 })
-        , r = new BinarySearchTree({ key: 15 })
-        , ll = new BinarySearchTree({ key: 3 })
-        , lr = new BinarySearchTree({ key: 8 })
-        , rl = new BinarySearchTree({ key: 11 })
-        , rr = new BinarySearchTree({ key: 42 })
-        ;
-
-      t.left = l; t.right = r;
-      l.left = ll; l.right = lr;
-      r.left = rl; r.right = rr;
-
-      t.checkNodeOrdering();
-
-      // Let's be paranoid and check all cases...
-      l.key = 12;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      l.key = 5;
-
-      r.key = 9;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      r.key = 15;
-
-      ll.key = 6;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      ll.key = 11;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      ll.key = 3;
-
-      lr.key = 4;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      lr.key = 11;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      lr.key = 8;
-
-      rl.key = 16;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      rl.key = 9;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      rl.key = 11;
-
-      rr.key = 12;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      rr.key = 7;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      rr.key = 10.5;
-      (function () { t.checkNodeOrdering(); }).should.throw();
-      rr.key = 42;
-
-      t.checkNodeOrdering();
-    });
-
-    it('Checking if a tree\'s internal pointers (i.e. parents) are correct', function () {
-      var t = new BinarySearchTree({ key: 10 })
-        , l = new BinarySearchTree({ key: 5 })
-        , r = new BinarySearchTree({ key: 15 })
-        , ll = new BinarySearchTree({ key: 3 })
-        , lr = new BinarySearchTree({ key: 8 })
-        , rl = new BinarySearchTree({ key: 11 })
-        , rr = new BinarySearchTree({ key: 42 })
-        ;
-
-      t.left = l; t.right = r;
-      l.left = ll; l.right = lr;
-      r.left = rl; r.right = rr;
-
-      (function () { t.checkInternalPointers(); }).should.throw();
-      l.parent = t;
-      (function () { t.checkInternalPointers(); }).should.throw();
-      r.parent = t;
-      (function () { t.checkInternalPointers(); }).should.throw();
-      ll.parent = l;
-      (function () { t.checkInternalPointers(); }).should.throw();
-      lr.parent = l;
-      (function () { t.checkInternalPointers(); }).should.throw();
-      rl.parent = r;
-      (function () { t.checkInternalPointers(); }).should.throw();
-      rr.parent = r;
-
-      t.checkInternalPointers();
-    });
-
-    it('Can get the number of inserted keys', function () {
-      var bst = new BinarySearchTree();
-
-      bst.getNumberOfKeys().should.equal(0);
-      bst.insert(10);
-      bst.getNumberOfKeys().should.equal(1);
-      bst.insert(5);
-      bst.getNumberOfKeys().should.equal(2);
-      bst.insert(3);
-      bst.getNumberOfKeys().should.equal(3);
-      bst.insert(8);
-      bst.getNumberOfKeys().should.equal(4);
-      bst.insert(15);
-      bst.getNumberOfKeys().should.equal(5);
-      bst.insert(12);
-      bst.getNumberOfKeys().should.equal(6);
-      bst.insert(37);
-      bst.getNumberOfKeys().should.equal(7);
-    });
-
-  });
+describe('AVL tree', function () {
 
   describe('Insertion', function () {
 
     it('Insert at the root if its the first insertion', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
-      bst.insert(10, 'some data');
+      avlt.insert(10, 'some data');
 
-      bst.checkIsBST();
-      bst.key.should.equal(10);
-      _.isEqual(bst.data, ['some data']).should.equal(true);
-      assert.isNull(bst.left);
-      assert.isNull(bst.right);
-    });
-
-    it("Insert on the left if key is less than the root's", function () {
-      var bst = new BinarySearchTree();
-
-      bst.insert(10, 'some data');
-      bst.insert(7, 'some other data');
-
-      bst.checkIsBST();
-      assert.isNull(bst.right);
-      bst.left.key.should.equal(7);
-      _.isEqual(bst.left.data, ['some other data']).should.equal(true);
-      assert.isNull(bst.left.left);
-      assert.isNull(bst.left.right);
-    });
-
-    it("Insert on the right if key is greater than the root's", function () {
-      var bst = new BinarySearchTree();
-
-      bst.insert(10, 'some data');
-      bst.insert(14, 'some other data');
-
-      bst.checkIsBST();
-      assert.isNull(bst.left);
-      bst.right.key.should.equal(14);
-      _.isEqual(bst.right.data, ['some other data']).should.equal(true);
-      assert.isNull(bst.right.left);
-      assert.isNull(bst.right.right);
-    });
-
-    it("Recursive insertion on the left works", function () {
-      var bst = new BinarySearchTree();
-
-      bst.insert(10, 'some data');
-      bst.insert(7, 'some other data');
-      bst.insert(1, 'hello');
-      bst.insert(9, 'world');
-
-      bst.checkIsBST();
-      assert.isNull(bst.right);
-      bst.left.key.should.equal(7);
-      _.isEqual(bst.left.data, ['some other data']).should.equal(true);
-
-      bst.left.left.key.should.equal(1);
-      _.isEqual(bst.left.left.data, ['hello']).should.equal(true);
-
-      bst.left.right.key.should.equal(9);
-      _.isEqual(bst.left.right.data, ['world']).should.equal(true);
-    });
-
-    it("Recursive insertion on the right works", function () {
-      var bst = new BinarySearchTree();
-
-      bst.insert(10, 'some data');
-      bst.insert(17, 'some other data');
-      bst.insert(11, 'hello');
-      bst.insert(19, 'world');
-
-      bst.checkIsBST();
-      assert.isNull(bst.left);
-      bst.right.key.should.equal(17);
-      _.isEqual(bst.right.data, ['some other data']).should.equal(true);
-
-      bst.right.left.key.should.equal(11);
-      _.isEqual(bst.right.left.data, ['hello']).should.equal(true);
-
-      bst.right.right.key.should.equal(19);
-      _.isEqual(bst.right.right.data, ['world']).should.equal(true);
+      avlt.checkIsBST();
+      avlt.tree.key.should.equal(10);
+      _.isEqual(avlt.tree.data, ['some data']).should.equal(true);
+      assert.isNull(avlt.tree.left);
+      assert.isNull(avlt.tree.right);
     });
 
     it('If uniqueness constraint not enforced, we can insert different data for same key', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
-      bst.insert(10, 'some data');
-      bst.insert(3, 'hello');
-      bst.insert(3, 'world');
+      avlt.insert(10, 'some data');
+      avlt.insert(3, 'hello');
+      avlt.insert(3, 'world');
 
-      bst.checkIsBST();
-      bst.left.key.should.equal(3);
-      _.isEqual(bst.left.data, ['hello', 'world']).should.equal(true);
+      avlt.checkIsBST();
+      _.isEqual(avlt.search(3), ['hello', 'world']).should.equal(true);
 
-      bst.insert(12, 'a');
-      bst.insert(12, 'b');
+      avlt.insert(12, 'a');
+      avlt.insert(12, 'b');
 
-      bst.checkIsBST();
-      bst.right.key.should.equal(12);
-      _.isEqual(bst.right.data, ['a', 'b']).should.equal(true);
+      avlt.checkIsBST();
+      _.isEqual(avlt.search(12), ['a', 'b']).should.equal(true);
     });
 
     it('If uniqueness constraint is enforced, we cannot insert different data for same key', function () {
-      var bst = new BinarySearchTree({ unique: true });
+      var avlt = new AVLTree({ unique: true });
 
-      bst.insert(10, 'some data');
-      bst.insert(3, 'hello');
+      avlt.insert(10, 'some data');
+      avlt.insert(3, 'hello');
       try {
-        bst.insert(3, 'world');
+        avlt.insert(3, 'world');
       } catch (e) {
         e.errorType.should.equal('uniqueViolated');
         e.key.should.equal(3);
       }
 
-      bst.checkIsBST();
-      bst.left.key.should.equal(3);
-      _.isEqual(bst.left.data, ['hello']).should.equal(true);
+      avlt.checkIsBST();
+      _.isEqual(avlt.search(3), ['hello']).should.equal(true);
 
-      bst.insert(12, 'a');
+      avlt.insert(12, 'a');
       try {
-        bst.insert(12, 'world');
+        avlt.insert(12, 'world');
       } catch (e) {
         e.errorType.should.equal('uniqueViolated');
         e.key.should.equal(12);
       }
 
-      bst.checkIsBST();
-      bst.right.key.should.equal(12);
-      _.isEqual(bst.right.data, ['a']).should.equal(true);
+      avlt.checkIsBST();
+      _.isEqual(avlt.search(12), ['a']).should.equal(true);
     });
 
     it('Can insert 0 or the empty string', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
-      bst.insert(0, 'some data');
+      avlt.insert(0, 'some data');
 
-      bst.checkIsBST();
-      bst.key.should.equal(0);
-      _.isEqual(bst.data, ['some data']).should.equal(true);
-      assert.isNull(bst.left);
-      assert.isNull(bst.right);
+      avlt.checkIsBST();
+      avlt.tree.key.should.equal(0);
+      _.isEqual(avlt.tree.data, ['some data']).should.equal(true);
 
-      bst = new BinarySearchTree();
+      avlt = new AVLTree();
 
-      bst.insert('', 'some other data');
+      avlt.insert('', 'some other data');
 
-      bst.checkIsBST();
-      bst.key.should.equal('');
-      _.isEqual(bst.data, ['some other data']).should.equal(true);
-      assert.isNull(bst.left);
-      assert.isNull(bst.right);
+      avlt.checkIsBST();
+      avlt.tree.key.should.equal('');
+      _.isEqual(avlt.tree.data, ['some other data']).should.equal(true);
     });
 
-    it('Can insert a lot of keys and still get a BST (sanity check)', function () {
-      var bst = new BinarySearchTree({ unique: true });
+    it('Auto-balancing insertions', function () {
+      var avlt = new AVLTree()
+        , avlt2 = new AVLTree()
+        , avlt3 = new AVLTree()
+        ;
+
+      // Balancing insertions on the left
+      avlt.tree.getNumberOfKeys().should.equal(0);
+      avlt.insert(18);
+      avlt.tree.getNumberOfKeys().should.equal(1);
+      avlt.tree.checkIsBST();
+      avlt.insert(15);
+      avlt.tree.getNumberOfKeys().should.equal(2);
+      avlt.tree.checkIsBST();
+      avlt.insert(13);
+      avlt.tree.getNumberOfKeys().should.equal(3);
+      avlt.tree.checkIsBST();
+      avlt.insert(10);
+      avlt.tree.getNumberOfKeys().should.equal(4);
+      avlt.tree.checkIsBST();
+      avlt.insert(8);
+      avlt.tree.getNumberOfKeys().should.equal(5);
+      avlt.tree.checkIsBST();
+      avlt.insert(5);
+      avlt.tree.getNumberOfKeys().should.equal(6);
+      avlt.tree.checkIsBST();
+      avlt.insert(3);
+      avlt.tree.getNumberOfKeys().should.equal(7);
+      avlt.tree.checkIsBST();
+
+      // Balancing insertions on the right
+      avlt2.tree.getNumberOfKeys().should.equal(0);
+      avlt2.insert(3);
+      avlt2.tree.getNumberOfKeys().should.equal(1);
+      avlt2.tree.checkIsBST();
+      avlt2.insert(5);
+      avlt2.tree.getNumberOfKeys().should.equal(2);
+      avlt2.tree.checkIsBST();
+      avlt2.insert(8);
+      avlt2.tree.getNumberOfKeys().should.equal(3);
+      avlt2.tree.checkIsBST();
+      avlt2.insert(10);
+      avlt2.tree.getNumberOfKeys().should.equal(4);
+      avlt2.tree.checkIsBST();
+      avlt2.insert(13);
+      avlt2.tree.getNumberOfKeys().should.equal(5);
+      avlt2.tree.checkIsBST();
+      avlt2.insert(15);
+      avlt2.tree.getNumberOfKeys().should.equal(6);
+      avlt2.tree.checkIsBST();
+      avlt2.insert(18);
+      avlt2.tree.getNumberOfKeys().should.equal(7);
+      avlt2.tree.checkIsBST();
+
+      // Balancing already-balanced insertions
+      avlt3.tree.getNumberOfKeys().should.equal(0);
+      avlt3.insert(10);
+      avlt3.tree.getNumberOfKeys().should.equal(1);
+      avlt3.tree.checkIsBST();
+      avlt3.insert(5);
+      avlt3.tree.getNumberOfKeys().should.equal(2);
+      avlt3.tree.checkIsBST();
+      avlt3.insert(15);
+      avlt3.tree.getNumberOfKeys().should.equal(3);
+      avlt3.tree.checkIsBST();
+      avlt3.insert(3);
+      avlt3.tree.getNumberOfKeys().should.equal(4);
+      avlt3.tree.checkIsBST();
+      avlt3.insert(8);
+      avlt3.tree.getNumberOfKeys().should.equal(5);
+      avlt3.tree.checkIsBST();
+      avlt3.insert(13);
+      avlt3.tree.getNumberOfKeys().should.equal(6);
+      avlt3.tree.checkIsBST();
+      avlt3.insert(18);
+      avlt3.tree.getNumberOfKeys().should.equal(7);
+      avlt3.tree.checkIsBST();
+    });
+
+    it.only('Can insert a lot of keys and still get a BST (sanity check)', function () {
+      var avlt = new AVLTree({ unique: true });
 
       customUtils.getRandomArray(100).forEach(function (n) {
-        bst.insert(n, 'some data');
+        avlt.insert(n, 'some data');
       });
 
-      bst.checkIsBST();
-    });
-
-    it('All children get a pointer to their parent, the root doesnt', function () {
-      var bst = new BinarySearchTree();
-
-      bst.insert(10, 'root');
-      bst.insert(5, 'yes');
-      bst.insert(15, 'no');
-
-      bst.checkIsBST();
-
-      assert.isNull(bst.parent);
-      bst.left.parent.should.equal(bst);
-      bst.right.parent.should.equal(bst);
+      avlt.checkIsBST();
     });
 
   });   // ==== End of 'Insertion' ==== //
@@ -1041,84 +846,6 @@ describe('Specific to AVL tree', function () {
     avlt.checkBalanceFactors();
   });
 
-  it('Auto-balancing insertions', function () {
-    var avlt = new AVLTree()
-      , avlt2 = new AVLTree()
-      , avlt3 = new AVLTree()
-      ;
-
-    // Balancing insertions on the left
-    avlt.tree.getNumberOfKeys().should.equal(0);
-    avlt.insert(18);
-    avlt.tree.getNumberOfKeys().should.equal(1);
-    avlt.tree.checkIsBST();
-    avlt.insert(15);
-    avlt.tree.getNumberOfKeys().should.equal(2);
-    avlt.tree.checkIsBST();
-    avlt.insert(13);
-    avlt.tree.getNumberOfKeys().should.equal(3);
-    avlt.tree.checkIsBST();
-    avlt.insert(10);
-    avlt.tree.getNumberOfKeys().should.equal(4);
-    avlt.tree.checkIsBST();
-    avlt.insert(8);
-    avlt.tree.getNumberOfKeys().should.equal(5);
-    avlt.tree.checkIsBST();
-    avlt.insert(5);
-    avlt.tree.getNumberOfKeys().should.equal(6);
-    avlt.tree.checkIsBST();
-    avlt.insert(3);
-    avlt.tree.getNumberOfKeys().should.equal(7);
-    avlt.tree.checkIsBST();
-
-    // Balancing insertions on the right
-    avlt2.tree.getNumberOfKeys().should.equal(0);
-    avlt2.insert(3);
-    avlt2.tree.getNumberOfKeys().should.equal(1);
-    avlt2.tree.checkIsBST();
-    avlt2.insert(5);
-    avlt2.tree.getNumberOfKeys().should.equal(2);
-    avlt2.tree.checkIsBST();
-    avlt2.insert(8);
-    avlt2.tree.getNumberOfKeys().should.equal(3);
-    avlt2.tree.checkIsBST();
-    avlt2.insert(10);
-    avlt2.tree.getNumberOfKeys().should.equal(4);
-    avlt2.tree.checkIsBST();
-    avlt2.insert(13);
-    avlt2.tree.getNumberOfKeys().should.equal(5);
-    avlt2.tree.checkIsBST();
-    avlt2.insert(15);
-    avlt2.tree.getNumberOfKeys().should.equal(6);
-    avlt2.tree.checkIsBST();
-    avlt2.insert(18);
-    avlt2.tree.getNumberOfKeys().should.equal(7);
-    avlt2.tree.checkIsBST();
-
-    // Balancing already-balanced insertions
-    avlt3.tree.getNumberOfKeys().should.equal(0);
-    avlt3.insert(10);
-    avlt3.tree.getNumberOfKeys().should.equal(1);
-    avlt3.tree.checkIsBST();
-    avlt3.insert(5);
-    avlt3.tree.getNumberOfKeys().should.equal(2);
-    avlt3.tree.checkIsBST();
-    avlt3.insert(15);
-    avlt3.tree.getNumberOfKeys().should.equal(3);
-    avlt3.tree.checkIsBST();
-    avlt3.insert(3);
-    avlt3.tree.getNumberOfKeys().should.equal(4);
-    avlt3.tree.checkIsBST();
-    avlt3.insert(8);
-    avlt3.tree.getNumberOfKeys().should.equal(5);
-    avlt3.tree.checkIsBST();
-    avlt3.insert(13);
-    avlt3.tree.getNumberOfKeys().should.equal(6);
-    avlt3.tree.checkIsBST();
-    avlt3.insert(18);
-    avlt3.tree.getNumberOfKeys().should.equal(7);
-    avlt3.tree.checkIsBST();
-  });
 
 });
 
