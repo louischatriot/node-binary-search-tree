@@ -9,7 +9,7 @@ var should = require('chai').should()
 
 describe('AVL tree', function () {
 
-  describe('Insertion', function () {
+  describe.only('Insertion', function () {
 
     it('Insert at the root if its the first insertion', function () {
       var avlt = new AVLTree();
@@ -164,14 +164,14 @@ describe('AVL tree', function () {
       avlt3.tree.checkIsBST();
     });
 
-    it.only('Can insert a lot of keys and still get a BST (sanity check)', function () {
+    it('Can insert a lot of keys and still get an AVLT (sanity check)', function () {
       var avlt = new AVLTree({ unique: true });
 
-      customUtils.getRandomArray(100).forEach(function (n) {
+      customUtils.getRandomArray(1000).forEach(function (n) {
         avlt.insert(n, 'some data');
+        avlt.checkIsBST();
       });
 
-      avlt.checkIsBST();
     });
 
   });   // ==== End of 'Insertion' ==== //
