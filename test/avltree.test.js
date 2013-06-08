@@ -458,9 +458,11 @@ describe('AVL tree', function () {
       avlt.getNumberOfKeys().should.equal(0);
     });
 
-    it('Able to delete leaf nodes that are non-root', function () {
+    it.only('Able to delete leaf nodes that are non-root', function () {
       var avlt;
 
+      // This will create an AVL tree with leaves 3, 8, 12, 37
+      // (do a pretty print to see this)
       function recreateavlt () {
         avlt = new AVLTree();
 
@@ -471,41 +473,63 @@ describe('AVL tree', function () {
         avlt.getNumberOfKeys().should.equal(7);
       }
 
-      function checkOnlyOneWasRemoved (theRemoved) {
+      // Check that only keys in array theRemoved were removed
+      function checkRemoved (theRemoved) {
         [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
-          if (k === theRemoved) {
+          if (theRemoved.indexOf(k) !== -1) {
             avlt.search(k).length.should.equal(0);
           } else {
             _.isEqual(avlt.search(k), ['some ' + k]).should.equal(true);
           }
         });
 
-        avlt.getNumberOfKeys().should.equal(6);
+        avlt.getNumberOfKeys().should.equal(7 - theRemoved.length);
       }
 
       recreateavlt();
       avlt.delete(3);
       avlt.checkIsAVLT();
-      checkOnlyOneWasRemoved(3);
-      assert.isNull(avlt.left.left);
+      checkRemoved([3]);
 
       recreateavlt();
       avlt.delete(8);
       avlt.checkIsAVLT();
-      checkOnlyOneWasRemoved(8);
-      assert.isNull(avlt.left.right);
+      checkRemoved([8]);
 
       recreateavlt();
       avlt.delete(12);
       avlt.checkIsAVLT();
-      checkOnlyOneWasRemoved(12);
-      assert.isNull(avlt.right.left);
+      checkRemoved([12]);
 
+      // Delete all leaves in a way that makes the tree unbalanced
       recreateavlt();
       avlt.delete(37);
       avlt.checkIsAVLT();
-      checkOnlyOneWasRemoved(37);
-      assert.isNull(avlt.right.right);
+      checkRemoved([37]);
+
+      avlt.delete(12);
+      avlt.checkIsAVLT();
+      checkRemoved([12, 37]);
+
+      avlt.delete(15);
+      avlt.checkIsAVLT();
+      checkRemoved([12, 15, 37]);
+
+      avlt.delete(3);
+      avlt.checkIsAVLT();
+      checkRemoved([3, 12, 15, 37]);
+
+      avlt.delete(5);
+      avlt.checkIsAVLT();
+      checkRemoved([3, 5, 12, 15, 37]);
+
+      avlt.delete(10);
+      avlt.checkIsAVLT();
+      checkRemoved([3, 5, 10, 12, 15, 37]);
+
+      avlt.delete(8);
+      avlt.checkIsAVLT();
+      checkRemoved([3, 5, 8, 10, 12, 15, 37]);
     });
 
     it('Able to delete the root if it has only one child', function () {
@@ -755,7 +779,7 @@ describe('AVL tree', function () {
 
 
 
-  it.only('YUP', function () {
+  it('YUP', function () {
     var avlt = new AVLTree();
 
     //avlt.delete(43);
