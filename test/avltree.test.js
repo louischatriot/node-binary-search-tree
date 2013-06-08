@@ -1,6 +1,6 @@
 var should = require('chai').should()
   , assert = require('chai').assert
-  , AVLTree = require('../lib/avltree')
+  , AVLTree = require('../index').AVLTree
   , _ = require('underscore')
   , customUtils = require('../lib/customUtils')
   ;

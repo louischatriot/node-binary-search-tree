@@ -1,6 +1,6 @@
 var should = require('chai').should()
   , assert = require('chai').assert
-  , BinarySearchTree = require('../lib/bst')
+  , BinarySearchTree = require('../index').BinarySearchTree
   , _ = require('underscore')
   , customUtils = require('../lib/customUtils')
   ;
