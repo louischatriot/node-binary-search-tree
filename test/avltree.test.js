@@ -753,36 +753,36 @@ describe('AVL tree', function () {
       avlt.getNumberOfKeys().should.equal(3);
     });
 
-    it.only('Can remove the root from a tree with height 2 when the root has two children (special case)', function () {
-      var bst = new BinarySearchTree();
+    it('Can remove the root from a tree with height 2 when the root has two children (special case)', function () {
+      var avlt = new AVLTree();
 
-      bst.insert(10, 'maybe');
-      bst.insert(5, 'no');
-      bst.insert(15, 'yes');
-      bst.getNumberOfKeys().should.equal(3);
+      avlt.insert(10, 'maybe');
+      avlt.insert(5, 'no');
+      avlt.insert(15, 'yes');
+      avlt.getNumberOfKeys().should.equal(3);
 
-      bst.delete(10);
-      bst.checkIsBST();
-      bst.getNumberOfKeys().should.equal(2);
-      assert.deepEqual(bst.search(5), ['no']);
-      assert.deepEqual(bst.search(15), ['yes']);
+      avlt.delete(10);
+      avlt.checkIsAVLT();
+      avlt.getNumberOfKeys().should.equal(2);
+      assert.deepEqual(avlt.search(5), ['no']);
+      assert.deepEqual(avlt.search(15), ['yes']);
     });
 
     it('Can remove the root from a tree with height 3 when the root has two children (special case where the two children themselves have children)', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
-      bst.insert(10, 'maybe');
-      bst.insert(5, 'no');
-      bst.insert(15, 'yes');
-      bst.insert(2, 'no');
-      bst.insert(35, 'yes');
-      bst.getNumberOfKeys().should.equal(5);
+      avlt.insert(10, 'maybe');
+      avlt.insert(5, 'no');
+      avlt.insert(15, 'yes');
+      avlt.insert(2, 'no');
+      avlt.insert(35, 'yes');
+      avlt.getNumberOfKeys().should.equal(5);
 
-      bst.delete(10);
-      bst.checkIsBST();
-      bst.getNumberOfKeys().should.equal(4);
-      assert.deepEqual(bst.search(5), ['no']);
-      assert.deepEqual(bst.search(15), ['yes']);
+      avlt.delete(10);
+      avlt.checkIsAVLT();
+      avlt.getNumberOfKeys().should.equal(4);
+      assert.deepEqual(avlt.search(5), ['no']);
+      assert.deepEqual(avlt.search(15), ['yes']);
     });
 
   });   // ==== End of 'Deletion' ==== //
@@ -816,57 +816,12 @@ describe('AVL tree', function () {
   });   // ==== End of 'Execute on every node' ==== //
 
 
-
-  it('YUP', function () {
-    var avlt = new AVLTree();
-
-    //avlt.delete(43);
-    //avlt.insert(21);
-    //avlt.insert(29);
-    //avlt.insert(36);
-    //avlt.insert(0);
-    //avlt.insert(38);
-    //avlt.insert(16);
-    //avlt.insert(53);
-    //avlt.delete(29);
-    //avlt.delete(0);
-    //avlt.insert(6);
-    //avlt.insert(48);
-
-
-    avlt.insert(52);
-    avlt.insert(65);
-    avlt.insert(57);
-    avlt.insert(29);
-    avlt.delete(65);
-    avlt.delete(57);
-    console.log("===========================");
-    console.log(avlt.tree);
-    avlt.delete(52);
-    console.log("===========================");
-    console.log(avlt.tree);
-
-
-    avlt.prettyPrint();
-
-    console.log("=====================");
-    //avlt.delete(36);
-
-    console.log("=====================");
-    avlt.prettyPrint();
-    avlt.checkIsAVLT();
-  });
-
-
-
-
-
   // This test performs several inserts and deletes at random, always checking the content
   // of the tree are as expected and the binary search tree constraint is respected
   // This test is important because it can catch bugs other tests can't
   // By their nature, BSTs can be hard to test (many possible cases, bug at one operation whose
   // effect begins to be felt only after several operations etc.)
-  describe('Randomized test (takes much longer than the rest of the test suite)', function () {
+  describe.skip('Randomized test (takes much longer than the rest of the test suite)', function () {
     var avlt = new AVLTree()
       , data = {};
 
