@@ -560,7 +560,7 @@ describe('AVL tree', function () {
       avlt.search(10).length.should.equal(0);
     });
 
-    it.only('Able to delete non root nodes that have only one child', function () {
+    it('Able to delete non root nodes that have only one child', function () {
       var avlt = new AVLTree()
         , firstSet = [10, 5, 15, 3, 1, 4, 20]
         , secondSet = [10, 5, 15, 3, 1, 4, 20, 17, 25]
@@ -618,21 +618,43 @@ describe('AVL tree', function () {
       checkRemoved(secondSet, [3, 4]);
     });
 
-    it('Can delete the root if it has 2 children', function () {
-      var bst;
+    it.only('Can delete the root if it has 2 children', function () {
+      var avlt = new AVLTree();
 
-      bst = new BinarySearchTree();
-      [10, 5, 3, 8, 15, 12, 37].forEach(function (k) {
-        bst.insert(k, 'some ' + k);
+      // No rebalancing needed
+      [10, 5, 15, 3, 8, 12, 37].forEach(function (k) {
+        avlt.insert(k, 'some ' + k);
       });
-      bst.getNumberOfKeys().should.equal(7);
-      bst.delete(10);
-      bst.checkIsBST();
-      bst.getNumberOfKeys().should.equal(6);
+      avlt.getNumberOfKeys().should.equal(7);
+      avlt.delete(10);
+      avlt.checkIsAVLT();
+      avlt.getNumberOfKeys().should.equal(6);
       [5, 3, 8, 15, 12, 37].forEach(function (k) {
-        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+        _.isEqual(avlt.search(k), ['some ' + k]).should.equal(true);
       });
-      bst.search(10).length.should.equal(0);
+      avlt.search(10).length.should.equal(0);
+
+      // Rebalancing needed
+      avlt = new AVLTree();
+      [10, 5, 15, 8, 12, 37, 42].forEach(function (k) {
+        avlt.insert(k, 'some ' + k);
+      });
+      avlt.getNumberOfKeys().should.equal(7);
+
+      console.log();
+      avlt.prettyPrint();
+
+      avlt.delete(10);
+
+      console.log();
+      avlt.prettyPrint();
+
+      avlt.checkIsAVLT();
+      avlt.getNumberOfKeys().should.equal(6);
+      [5, 8, 15, 12, 37, 42].forEach(function (k) {
+        _.isEqual(avlt.search(k), ['some ' + k]).should.equal(true);
+      });
+      avlt.search(10).length.should.equal(0);
     });
 
     it('Can delete a non-root node that has two children', function () {
