@@ -787,6 +787,74 @@ describe('AVL tree', function () {
   });   // ==== End of 'Deletion' ==== //
 
 
+  it('Can use undefined as key and value', function () {
+    function compareKeys (a, b) {
+      if (a === undefined && b === undefined) { return 0; }
+      if (a === undefined) { return -1; }
+      if (b === undefined) { return 1; }
+
+      if (a < b) { return -1; }
+      if (a > b) { return 1; }
+      if (a === b) { return 0; }
+    }
+
+    var avlt = new AVLTree({ compareKeys: compareKeys });
+
+    avlt.insert(2, undefined);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(1);
+    assert.deepEqual(avlt.search(2), [undefined]);
+    assert.deepEqual(avlt.search(undefined), []);
+
+    avlt.insert(undefined, 'hello');
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(2);
+    assert.deepEqual(avlt.search(2), [undefined]);
+    assert.deepEqual(avlt.search(undefined), ['hello']);
+
+    avlt.insert(undefined, 'world');
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(2);
+    assert.deepEqual(avlt.search(2), [undefined]);
+    assert.deepEqual(avlt.search(undefined), ['hello', 'world']);
+
+    avlt.insert(4, undefined);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(3);
+    assert.deepEqual(avlt.search(2), [undefined]);
+    assert.deepEqual(avlt.search(4), [undefined]);
+    assert.deepEqual(avlt.search(undefined), ['hello', 'world']);
+
+    avlt.delete(undefined, 'hello');
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(3);
+    assert.deepEqual(avlt.search(2), [undefined]);
+    assert.deepEqual(avlt.search(4), [undefined]);
+    assert.deepEqual(avlt.search(undefined), ['world']);
+
+    avlt.delete(undefined);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(2);
+    assert.deepEqual(avlt.search(2), [undefined]);
+    assert.deepEqual(avlt.search(4), [undefined]);
+    assert.deepEqual(avlt.search(undefined), []);
+
+    avlt.delete(2, undefined);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(1);
+    assert.deepEqual(avlt.search(2), []);
+    assert.deepEqual(avlt.search(4), [undefined]);
+    assert.deepEqual(avlt.search(undefined), []);
+
+    avlt.delete(4);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(0);
+    assert.deepEqual(avlt.search(2), []);
+    assert.deepEqual(avlt.search(4), []);
+    assert.deepEqual(avlt.search(undefined), []);
+  });
+
+
   describe('Execute on every node (=tree traversal)', function () {
 
     it('Can execute a function on every node', function () {
