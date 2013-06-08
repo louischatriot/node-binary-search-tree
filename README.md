@@ -1,6 +1,6 @@
 # Binary search trees for Node.js
 
-Two implementations of binary search tree: basic and AVL (a kind of self-balancing binmary search tree). I wrote this module primarily to store indexes for <a href="https://github.com/louischatriot/nedb" target="_blank">NeDB</a> (a javascript dependency-less database).
+Two implementations of binary search tree: <a href="http://en.wikipedia.org/wiki/Binary_search_tree" target="_blank">basic</a> and <a href="http://en.wikipedia.org/wiki/AVL_tree" target="_blank">AVL</a> (a kind of self-balancing binmary search tree). I wrote this module primarily to store indexes for <a href="https://github.com/louischatriot/nedb" target="_blank">NeDB</a> (a javascript dependency-less database).
 
 
 ## Installation and tests
@@ -17,7 +17,7 @@ The API mainly provides 3 functions: `insert`, `search` and `delete`. If you do 
 
 ```javascript
 var BinarySearchTree = require('binary-search-tree').BinarySearchTree
-  , AVLTree = require('binary-search-tree').AVLTree   // Not yet implemented
+  , AVLTree = require('binary-search-tree').AVLTree   // Same API as BinarySearchTree
 
 // Creating a binary search tree
 var bst = new BinarySearchTree();
