@@ -618,7 +618,7 @@ describe('AVL tree', function () {
       checkRemoved(secondSet, [3, 4]);
     });
 
-    it.only('Can delete the root if it has 2 children', function () {
+    it('Can delete the root if it has 2 children', function () {
       var avlt = new AVLTree();
 
       // No rebalancing needed
@@ -640,15 +640,7 @@ describe('AVL tree', function () {
         avlt.insert(k, 'some ' + k);
       });
       avlt.getNumberOfKeys().should.equal(7);
-
-      console.log();
-      avlt.prettyPrint();
-
       avlt.delete(10);
-
-      console.log();
-      avlt.prettyPrint();
-
       avlt.checkIsAVLT();
       avlt.getNumberOfKeys().should.equal(6);
       [5, 8, 15, 12, 37, 42].forEach(function (k) {
@@ -657,7 +649,7 @@ describe('AVL tree', function () {
       avlt.search(10).length.should.equal(0);
     });
 
-    it('Can delete a non-root node that has two children', function () {
+    it.only('Can delete a non-root node that has two children', function () {
       var bst;
 
       bst = new BinarySearchTree();
