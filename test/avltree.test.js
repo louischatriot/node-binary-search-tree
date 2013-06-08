@@ -1,6 +1,5 @@
 var should = require('chai').should()
   , assert = require('chai').assert
-  , BinarySearchTree = require('../lib/avltree')
   , AVLTree = require('../lib/avltree')
   , _ = require('underscore')
   , customUtils = require('../lib/customUtils')
@@ -821,7 +820,7 @@ describe('AVL tree', function () {
   // This test is important because it can catch bugs other tests can't
   // By their nature, BSTs can be hard to test (many possible cases, bug at one operation whose
   // effect begins to be felt only after several operations etc.)
-  describe.skip('Randomized test (takes much longer than the rest of the test suite)', function () {
+  describe('Randomized test (takes much longer than the rest of the test suite)', function () {
     var avlt = new AVLTree()
       , data = {};
 
@@ -872,15 +871,11 @@ describe('AVL tree', function () {
               key = Math.floor(70 * Math.random()).toString();
             }
 
-            console.log("DELETE " + key);
-
             delete data[key];
             avlt.delete(key);
           } else {   // Insertion
             key = Math.floor(70 * Math.random()).toString();
             dataPiece = Math.random().toString().substring(0, 6);
-
-            console.log("INSERT " + key);
 
             avlt.insert(key, dataPiece);
             if (data[key]) {

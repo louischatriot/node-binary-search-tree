@@ -6,7 +6,7 @@ var should = require('chai').should()
   ;
 
 
-describe.skip('Binary search tree', function () {
+describe('Binary search tree', function () {
 
   it('Upon creation, left, right and key are null, and data is empty', function () {
     var bst = new BinarySearchTree();
