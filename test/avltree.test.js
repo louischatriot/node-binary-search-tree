@@ -458,7 +458,7 @@ describe('AVL tree', function () {
       avlt.getNumberOfKeys().should.equal(0);
     });
 
-    it.only('Able to delete leaf nodes that are non-root', function () {
+    it('Able to delete leaf nodes that are non-root', function () {
       var avlt;
 
       // This will create an AVL tree with leaves 3, 8, 12, 37
@@ -533,71 +533,89 @@ describe('AVL tree', function () {
     });
 
     it('Able to delete the root if it has only one child', function () {
-      var bst;
+      var avlt;
 
       // Root has only one child, on the left
-      bst = new BinarySearchTree();
-      [10, 5, 3, 6].forEach(function (k) {
-        bst.insert(k, 'some ' + k);
+      avlt = new AVLTree();
+      [10, 5].forEach(function (k) {
+        avlt.insert(k, 'some ' + k);
       });
-      bst.getNumberOfKeys().should.equal(4);
-      bst.delete(10);
-      bst.checkIsBST();
-      bst.getNumberOfKeys().should.equal(3);
-      [5, 3, 6].forEach(function (k) {
-        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
-      });
-      bst.search(10).length.should.equal(0);
+      avlt.getNumberOfKeys().should.equal(2);
+      avlt.delete(10);
+      avlt.checkIsAVLT();
+      avlt.getNumberOfKeys().should.equal(1);
+      _.isEqual(avlt.search(5), ['some 5']).should.equal(true);
+      avlt.search(10).length.should.equal(0);
 
       // Root has only one child, on the right
-      bst = new BinarySearchTree();
-      [10, 15, 13, 16].forEach(function (k) {
-        bst.insert(k, 'some ' + k);
+      avlt = new AVLTree();
+      [10, 15].forEach(function (k) {
+        avlt.insert(k, 'some ' + k);
       });
-      bst.getNumberOfKeys().should.equal(4);
-      bst.delete(10);
-      bst.checkIsBST();
-      bst.getNumberOfKeys().should.equal(3);
-      [15, 13, 16].forEach(function (k) {
-        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
-      });
-      bst.search(10).length.should.equal(0);
+      avlt.getNumberOfKeys().should.equal(2);
+      avlt.delete(10);
+      avlt.checkIsAVLT();
+      avlt.getNumberOfKeys().should.equal(1);
+      _.isEqual(avlt.search(15), ['some 15']).should.equal(true);
+      avlt.search(10).length.should.equal(0);
     });
 
-    it('Able to delete non root nodes that have only one child', function () {
-      var bst;
+    it.only('Able to delete non root nodes that have only one child', function () {
+      var avlt = new AVLTree()
+        , firstSet = [10, 5, 15, 3, 1, 4, 20]
+        , secondSet = [10, 5, 15, 3, 1, 4, 20, 17, 25]
+        ;
 
-      function recreateBst () {
-        bst = new BinarySearchTree();
-
-        [10, 5, 15, 3, 1, 4, 20, 17, 25].forEach(function (k) {
-          bst.insert(k, 'some ' + k);
-        });
-
-        bst.getNumberOfKeys().should.equal(9);
-      }
-
-      function checkOnlyOneWasRemoved (theRemoved) {
-        [10, 5, 15, 3, 1, 4, 20, 17, 25].forEach(function (k) {
-          if (k === theRemoved) {
-            bst.search(k).length.should.equal(0);
+      // Check that only keys in array theRemoved were removed
+      function checkRemoved (set, theRemoved) {
+        set.forEach(function (k) {
+          if (theRemoved.indexOf(k) !== -1) {
+            avlt.search(k).length.should.equal(0);
           } else {
-            _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+            _.isEqual(avlt.search(k), ['some ' + k]).should.equal(true);
           }
         });
 
-        bst.getNumberOfKeys().should.equal(8);
+        avlt.getNumberOfKeys().should.equal(set.length - theRemoved.length);
       }
 
-      recreateBst();
-      bst.delete(5);
-      bst.checkIsBST();
-      checkOnlyOneWasRemoved(5);
+      // First set: no rebalancing necessary
+      firstSet.forEach(function (k) {
+        avlt.insert(k, 'some ' + k);
+      });
 
-      recreateBst();
-      bst.delete(15);
-      bst.checkIsBST();
-      checkOnlyOneWasRemoved(15);
+      avlt.getNumberOfKeys().should.equal(7);
+      avlt.checkIsAVLT();
+
+      avlt.delete(4);   // Leaf
+      avlt.checkIsAVLT();
+      checkRemoved(firstSet, [4]);
+
+      avlt.delete(3);   // Node with only one child (on the left)
+      avlt.checkIsAVLT();
+      checkRemoved(firstSet, [3, 4]);
+
+      avlt.delete(10);   // Leaf
+      avlt.checkIsAVLT();
+      checkRemoved(firstSet, [3, 4, 10]);
+
+      avlt.delete(15);   // Node with only one child (on the right)
+      avlt.checkIsAVLT();
+      checkRemoved(firstSet, [3, 4, 10, 15]);
+
+      // Second set: some rebalancing necessary
+      avlt = new AVLTree();
+      secondSet.forEach(function (k) {
+        avlt.insert(k, 'some ' + k);
+      });
+
+      avlt.delete(4);   // Leaf
+      avlt.checkIsAVLT();
+      checkRemoved(secondSet, [4]);
+
+      avlt.delete(3);   // Node with only one child (on the left), causes rebalancing
+      avlt.checkIsAVLT();
+      checkRemoved(secondSet, [3, 4]);
     });
 
     it('Can delete the root if it has 2 children', function () {
