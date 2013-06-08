@@ -649,105 +649,111 @@ describe('AVL tree', function () {
       avlt.search(10).length.should.equal(0);
     });
 
-    it.only('Can delete a non-root node that has two children', function () {
-      var bst;
+    it('Can delete a non-root node that has two children', function () {
+      var avlt;
 
-      bst = new BinarySearchTree();
-      [10, 5, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42].forEach(function (k) {
-        bst.insert(k, 'some ' + k);
+      // On the left
+      avlt = new AVLTree();
+      [10, 5, 15, 3, 8, 12, 20, 1, 4, 6, 9, 11, 13, 19, 42, 3.5].forEach(function (k) {
+        avlt.insert(k, 'some ' + k);
       });
-      bst.getNumberOfKeys().should.equal(15);
-      bst.delete(5);
-      bst.checkIsBST();
-      bst.getNumberOfKeys().should.equal(14);
-      [10, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42].forEach(function (k) {
-        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+      avlt.getNumberOfKeys().should.equal(16);
+      avlt.delete(5);
+      avlt.checkIsAVLT();
+      avlt.getNumberOfKeys().should.equal(15);
+      [10, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42, 3.5].forEach(function (k) {
+        _.isEqual(avlt.search(k), ['some ' + k]).should.equal(true);
       });
-      bst.search(5).length.should.equal(0);
+      avlt.search(5).length.should.equal(0);
 
-      bst = new BinarySearchTree();
-      [10, 5, 3, 1, 4, 8, 6, 9, 15, 12, 11, 13, 20, 19, 42].forEach(function (k) {
-        bst.insert(k, 'some ' + k);
+      // On the right
+      avlt = new AVLTree();
+      [10, 5, 15, 3, 8, 12, 20, 1, 4, 6, 9, 11, 13, 19, 42, 12.5].forEach(function (k) {
+        avlt.insert(k, 'some ' + k);
       });
-      bst.getNumberOfKeys().should.equal(15);
-      bst.delete(15);
-      bst.checkIsBST();
-      bst.getNumberOfKeys().should.equal(14);
-      [10, 5, 3, 1, 4, 8, 6, 9, 12, 11, 13, 20, 19, 42].forEach(function (k) {
-        _.isEqual(bst.search(k), ['some ' + k]).should.equal(true);
+      avlt.getNumberOfKeys().should.equal(16);
+      avlt.delete(15);
+      avlt.checkIsAVLT();
+      avlt.getNumberOfKeys().should.equal(15);
+      [10, 3, 1, 4, 8, 6, 9, 5, 12, 11, 13, 20, 19, 42, 12.5].forEach(function (k) {
+        _.isEqual(avlt.search(k), ['some ' + k]).should.equal(true);
       });
-      bst.search(15).length.should.equal(0);
+      avlt.search(15).length.should.equal(0);
     });
 
     it('If no value is provided, it will delete the entire node even if there are multiple pieces of data', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
-      bst.insert(10, 'yes');
-      bst.insert(5, 'hello');
-      bst.insert(3, 'yes');
-      bst.insert(5, 'world');
-      bst.insert(8, 'yes');
+      avlt.insert(10, 'yes');
+      avlt.insert(5, 'hello');
+      avlt.insert(3, 'yes');
+      avlt.insert(5, 'world');
+      avlt.insert(8, 'yes');
 
-      assert.deepEqual(bst.search(5), ['hello', 'world']);
-      bst.getNumberOfKeys().should.equal(4);
+      assert.deepEqual(avlt.search(5), ['hello', 'world']);
+      avlt.getNumberOfKeys().should.equal(4);
 
-      bst.delete(5);
-      bst.search(5).length.should.equal(0);
-      bst.getNumberOfKeys().should.equal(3);
+      avlt.delete(5);
+      avlt.checkIsAVLT();
+      avlt.search(5).length.should.equal(0);
+      avlt.getNumberOfKeys().should.equal(3);
     });
 
     it('Can remove only one value from an array', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
-      bst.insert(10, 'yes');
-      bst.insert(5, 'hello');
-      bst.insert(3, 'yes');
-      bst.insert(5, 'world');
-      bst.insert(8, 'yes');
+      avlt.insert(10, 'yes');
+      avlt.insert(5, 'hello');
+      avlt.insert(3, 'yes');
+      avlt.insert(5, 'world');
+      avlt.insert(8, 'yes');
 
-      assert.deepEqual(bst.search(5), ['hello', 'world']);
-      bst.getNumberOfKeys().should.equal(4);
+      assert.deepEqual(avlt.search(5), ['hello', 'world']);
+      avlt.getNumberOfKeys().should.equal(4);
 
-      bst.delete(5, 'hello');
-      assert.deepEqual(bst.search(5), ['world']);
-      bst.getNumberOfKeys().should.equal(4);
+      avlt.delete(5, 'hello');
+      avlt.checkIsAVLT();
+      assert.deepEqual(avlt.search(5), ['world']);
+      avlt.getNumberOfKeys().should.equal(4);
     });
 
     it('Removes nothing if value doesnt match', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
-      bst.insert(10, 'yes');
-      bst.insert(5, 'hello');
-      bst.insert(3, 'yes');
-      bst.insert(5, 'world');
-      bst.insert(8, 'yes');
+      avlt.insert(10, 'yes');
+      avlt.insert(5, 'hello');
+      avlt.insert(3, 'yes');
+      avlt.insert(5, 'world');
+      avlt.insert(8, 'yes');
 
-      assert.deepEqual(bst.search(5), ['hello', 'world']);
-      bst.getNumberOfKeys().should.equal(4);
+      assert.deepEqual(avlt.search(5), ['hello', 'world']);
+      avlt.getNumberOfKeys().should.equal(4);
 
-      bst.delete(5, 'nope');
-      assert.deepEqual(bst.search(5), ['hello', 'world']);
-      bst.getNumberOfKeys().should.equal(4);
+      avlt.delete(5, 'nope');
+      avlt.checkIsAVLT();
+      assert.deepEqual(avlt.search(5), ['hello', 'world']);
+      avlt.getNumberOfKeys().should.equal(4);
     });
 
     it('If value provided but node contains only one value, remove entire node', function () {
-      var bst = new BinarySearchTree();
+      var avlt = new AVLTree();
 
-      bst.insert(10, 'yes');
-      bst.insert(5, 'hello');
-      bst.insert(3, 'yes2');
-      bst.insert(5, 'world');
-      bst.insert(8, 'yes3');
+      avlt.insert(10, 'yes');
+      avlt.insert(5, 'hello');
+      avlt.insert(3, 'yes2');
+      avlt.insert(5, 'world');
+      avlt.insert(8, 'yes3');
 
-      assert.deepEqual(bst.search(3), ['yes2']);
-      bst.getNumberOfKeys().should.equal(4);
+      assert.deepEqual(avlt.search(3), ['yes2']);
+      avlt.getNumberOfKeys().should.equal(4);
 
-      bst.delete(3, 'yes2');
-      bst.search(3).length.should.equal(0);
-      bst.getNumberOfKeys().should.equal(3);
+      avlt.delete(3, 'yes2');
+      avlt.checkIsAVLT();
+      avlt.search(3).length.should.equal(0);
+      avlt.getNumberOfKeys().should.equal(3);
     });
 
-    it('Can remove the root from a tree with height 2 when the root has two children (special case)', function () {
+    it.only('Can remove the root from a tree with height 2 when the root has two children (special case)', function () {
       var bst = new BinarySearchTree();
 
       bst.insert(10, 'maybe');
