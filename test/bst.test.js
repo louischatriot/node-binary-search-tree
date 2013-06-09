@@ -8,12 +8,19 @@ var should = require('chai').should()
 
 describe('Binary search tree', function () {
 
-  it('Upon creation, left, right and key are null, and data is empty', function () {
+  it('Upon creation, left, right are null, key and data can be set', function () {
     var bst = new BinarySearchTree();
     assert.isNull(bst.left);
     assert.isNull(bst.right);
-    assert.isNull(bst.key);
+    bst.hasOwnProperty('key').should.equal(false);
     bst.data.length.should.equal(0);
+
+    bst = new BinarySearchTree({ key: 6, value: 'ggg' });
+    assert.isNull(bst.left);
+    assert.isNull(bst.right);
+    bst.key.should.equal(6);
+    bst.data.length.should.equal(1);
+    bst.data[0].should.equal('ggg');
   });
 
   describe('Sanity checks', function () {
@@ -59,7 +66,7 @@ describe('Binary search tree', function () {
       t.right.left.getMaxKey().should.equal(11);
     });
 
-    it('Can check a condition again every node in a tree', function () {
+    it('Can check a condition against every node in a tree', function () {
       var t = new BinarySearchTree({ key: 10 })
         , l = new BinarySearchTree({ key: 6 })
         , r = new BinarySearchTree({ key: 16 })
@@ -420,8 +427,8 @@ describe('Binary search tree', function () {
       bst.delete(5);
       bstu.delete(5);
 
-      assert.isNull(bst.key);
-      assert.isNull(bstu.key);
+      bst.hasOwnProperty('key').should.equal(false);
+      bstu.hasOwnProperty('key').should.equal(false);
 
       bst.data.length.should.equal(0);
       bstu.data.length.should.equal(0);
@@ -473,7 +480,7 @@ describe('Binary search tree', function () {
       bst.getNumberOfKeys().should.equal(1);
 
       bst.delete(10);
-      assert.isNull(bst.key);
+      bst.hasOwnProperty('key').should.equal(false);
       bst.data.length.should.equal(0);
       bst.getNumberOfKeys().should.equal(0);
     });
@@ -813,6 +820,74 @@ describe('Binary search tree', function () {
     assert.deepEqual(bst.search(2), []);
     assert.deepEqual(bst.search(4), []);
     assert.deepEqual(bst.search(undefined), []);
+  });
+
+
+  it('Can use null as key and value', function () {
+    function compareKeys (a, b) {
+      if (a === null && b === null) { return 0; }
+      if (a === null) { return -1; }
+      if (b === null) { return 1; }
+
+      if (a < b) { return -1; }
+      if (a > b) { return 1; }
+      if (a === b) { return 0; }
+    }
+
+    var bst = new BinarySearchTree({ compareKeys: compareKeys });
+
+    bst.insert(2, null);
+    bst.checkIsBST();
+    bst.getNumberOfKeys().should.equal(1);
+    assert.deepEqual(bst.search(2), [null]);
+    assert.deepEqual(bst.search(null), []);
+
+    bst.insert(null, 'hello');
+    bst.checkIsBST();
+    bst.getNumberOfKeys().should.equal(2);
+    assert.deepEqual(bst.search(2), [null]);
+    assert.deepEqual(bst.search(null), ['hello']);
+
+    bst.insert(null, 'world');
+    bst.checkIsBST();
+    bst.getNumberOfKeys().should.equal(2);
+    assert.deepEqual(bst.search(2), [null]);
+    assert.deepEqual(bst.search(null), ['hello', 'world']);
+
+    bst.insert(4, null);
+    bst.checkIsBST();
+    bst.getNumberOfKeys().should.equal(3);
+    assert.deepEqual(bst.search(2), [null]);
+    assert.deepEqual(bst.search(4), [null]);
+    assert.deepEqual(bst.search(null), ['hello', 'world']);
+
+    bst.delete(null, 'hello');
+    bst.checkIsBST();
+    bst.getNumberOfKeys().should.equal(3);
+    assert.deepEqual(bst.search(2), [null]);
+    assert.deepEqual(bst.search(4), [null]);
+    assert.deepEqual(bst.search(null), ['world']);
+
+    bst.delete(null);
+    bst.checkIsBST();
+    bst.getNumberOfKeys().should.equal(2);
+    assert.deepEqual(bst.search(2), [null]);
+    assert.deepEqual(bst.search(4), [null]);
+    assert.deepEqual(bst.search(null), []);
+
+    bst.delete(2, null);
+    bst.checkIsBST();
+    bst.getNumberOfKeys().should.equal(1);
+    assert.deepEqual(bst.search(2), []);
+    assert.deepEqual(bst.search(4), [null]);
+    assert.deepEqual(bst.search(null), []);
+
+    bst.delete(4);
+    bst.checkIsBST();
+    bst.getNumberOfKeys().should.equal(0);
+    assert.deepEqual(bst.search(2), []);
+    assert.deepEqual(bst.search(4), []);
+    assert.deepEqual(bst.search(null), []);
   });
 
 

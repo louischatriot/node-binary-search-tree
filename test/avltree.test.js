@@ -399,8 +399,8 @@ describe('AVL tree', function () {
       avlt.delete(5);
       avltu.delete(5);
 
-      assert.isNull(avlt.tree.key);
-      assert.isNull(avltu.tree.key);
+      avlt.tree.hasOwnProperty('key').should.equal(false);
+      avltu.tree.hasOwnProperty('key').should.equal(false);
 
       avlt.tree.data.length.should.equal(0);
       avltu.tree.data.length.should.equal(0);
@@ -452,7 +452,7 @@ describe('AVL tree', function () {
       avlt.getNumberOfKeys().should.equal(1);
 
       avlt.delete(10);
-      assert.isNull(avlt.tree.key);
+      avlt.tree.hasOwnProperty('key').should.equal(false);
       avlt.tree.data.length.should.equal(0);
       avlt.getNumberOfKeys().should.equal(0);
     });
@@ -852,6 +852,74 @@ describe('AVL tree', function () {
     assert.deepEqual(avlt.search(2), []);
     assert.deepEqual(avlt.search(4), []);
     assert.deepEqual(avlt.search(undefined), []);
+  });
+
+
+  it('Can use null as key and value', function () {
+    function compareKeys (a, b) {
+      if (a === null && b === null) { return 0; }
+      if (a === null) { return -1; }
+      if (b === null) { return 1; }
+
+      if (a < b) { return -1; }
+      if (a > b) { return 1; }
+      if (a === b) { return 0; }
+    }
+
+    var avlt = new AVLTree({ compareKeys: compareKeys });
+
+    avlt.insert(2, null);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(1);
+    assert.deepEqual(avlt.search(2), [null]);
+    assert.deepEqual(avlt.search(null), []);
+
+    avlt.insert(null, 'hello');
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(2);
+    assert.deepEqual(avlt.search(2), [null]);
+    assert.deepEqual(avlt.search(null), ['hello']);
+
+    avlt.insert(null, 'world');
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(2);
+    assert.deepEqual(avlt.search(2), [null]);
+    assert.deepEqual(avlt.search(null), ['hello', 'world']);
+
+    avlt.insert(4, null);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(3);
+    assert.deepEqual(avlt.search(2), [null]);
+    assert.deepEqual(avlt.search(4), [null]);
+    assert.deepEqual(avlt.search(null), ['hello', 'world']);
+
+    avlt.delete(null, 'hello');
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(3);
+    assert.deepEqual(avlt.search(2), [null]);
+    assert.deepEqual(avlt.search(4), [null]);
+    assert.deepEqual(avlt.search(null), ['world']);
+
+    avlt.delete(null);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(2);
+    assert.deepEqual(avlt.search(2), [null]);
+    assert.deepEqual(avlt.search(4), [null]);
+    assert.deepEqual(avlt.search(null), []);
+
+    avlt.delete(2, null);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(1);
+    assert.deepEqual(avlt.search(2), []);
+    assert.deepEqual(avlt.search(4), [null]);
+    assert.deepEqual(avlt.search(null), []);
+
+    avlt.delete(4);
+    avlt.checkIsAVLT();
+    avlt.getNumberOfKeys().should.equal(0);
+    assert.deepEqual(avlt.search(2), []);
+    assert.deepEqual(avlt.search(4), []);
+    assert.deepEqual(avlt.search(null), []);
   });
 
 
