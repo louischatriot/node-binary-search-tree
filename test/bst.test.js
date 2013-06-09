@@ -378,7 +378,7 @@ describe('Binary search tree', function () {
   });   // ==== End of 'Insertion' ==== //
 
 
-  describe('Search', function () {
+  describe.only('Search', function () {
 
     it('Can find data in a BST', function () {
       var bst = new BinarySearchTree()
@@ -410,6 +410,16 @@ describe('Binary search tree', function () {
       bst.search(100).length.should.equal(0);
       bst.search(101).length.should.equal(0);
       bst.search(63).length.should.equal(0);
+    });
+
+    it('Can search for data between two bounds', function () {
+      var bst = new BinarySearchTree();
+
+      [10, 5, 15, 3, 8, 13, 18].forEach(function (k) {
+        bst.insert(k, 'some data for ' + k);
+      });
+
+      console.log(bst.betweenBounds({ $gte: 8, $lte: 12 }));
     });
 
   });   /// ==== End of 'Search' ==== //
