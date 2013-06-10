@@ -36,6 +36,11 @@ bst.search(15);   // Equal to ['some data for key 15']
 bst.search(18);   // Equal to ['hello', 'world']
 bst.search(1);    // Equal to []
 
+// Search between bounds with a MongoDB-like query
+// Data is returned in key order
+// Note the difference between $lt (less than) and $gte (less than OR EQUAL)
+bst.betweenBounds({ $lt: 18, $gte: 12});   // Equal to ['something else', 'some data for key 15']
+
 // Deleting all the data relating to a key
 bst.delete(15);   // bst.search(15) will now give []
 bst.delete(18, 'world');   // bst.search(18) will now give ['hello']
