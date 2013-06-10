@@ -384,6 +384,44 @@ describe('AVL tree', function () {
       avlt.search(63).length.should.equal(0);
     });
 
+    it('Can search for data between two bounds', function () {
+      var avlt = new AVLTree();
+
+      [10, 5, 15, 3, 8, 13, 18].forEach(function (k) {
+        avlt.insert(k, 'data ' + k);
+      });
+
+      assert.deepEqual(avlt.betweenBounds({ $gte: 8, $lte: 15 }), ['data 8', 'data 10', 'data 13', 'data 15']);
+      assert.deepEqual(avlt.betweenBounds({ $gt: 8, $lt: 15 }), ['data 10', 'data 13']);
+    });
+
+    it('Bounded search can handle cases where query contains both $lt and $lte, or both $gt and $gte', function () {
+      var avlt = new AVLTree();
+
+      [10, 5, 15, 3, 8, 13, 18].forEach(function (k) {
+        avlt.insert(k, 'data ' + k);
+      });
+
+      assert.deepEqual(avlt.betweenBounds({ $gt:8, $gte: 8, $lte: 15 }), ['data 10', 'data 13', 'data 15']);
+      assert.deepEqual(avlt.betweenBounds({ $gt:5, $gte: 8, $lte: 15 }), ['data 8', 'data 10', 'data 13', 'data 15']);
+      assert.deepEqual(avlt.betweenBounds({ $gt:8, $gte: 5, $lte: 15 }), ['data 10', 'data 13', 'data 15']);
+
+      assert.deepEqual(avlt.betweenBounds({ $gte: 8, $lte: 15, $lt: 15 }), ['data 8', 'data 10', 'data 13']);
+      assert.deepEqual(avlt.betweenBounds({ $gte: 8, $lte: 18, $lt: 15 }), ['data 8', 'data 10', 'data 13']);
+      assert.deepEqual(avlt.betweenBounds({ $gte: 8, $lte: 15, $lt: 18 }), ['data 8', 'data 10', 'data 13', 'data 15']);
+    });
+
+    it('Bounded search can work when one or both boundaries are missing', function () {
+      var avlt = new AVLTree();
+
+      [10, 5, 15, 3, 8, 13, 18].forEach(function (k) {
+        avlt.insert(k, 'data ' + k);
+      });
+
+      assert.deepEqual(avlt.betweenBounds({ $gte: 11 }), ['data 13', 'data 15', 'data 18']);
+      assert.deepEqual(avlt.betweenBounds({ $lte: 9 }), ['data 3', 'data 5', 'data 8']);
+    });
+
   });   /// ==== End of 'Search' ==== //
 
 

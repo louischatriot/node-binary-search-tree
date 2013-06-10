@@ -378,7 +378,7 @@ describe('Binary search tree', function () {
   });   // ==== End of 'Insertion' ==== //
 
 
-  describe.only('Search', function () {
+  describe('Search', function () {
 
     it('Can find data in a BST', function () {
       var bst = new BinarySearchTree()
