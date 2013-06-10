@@ -416,10 +416,38 @@ describe('Binary search tree', function () {
       var bst = new BinarySearchTree();
 
       [10, 5, 15, 3, 8, 13, 18].forEach(function (k) {
-        bst.insert(k, 'some data for ' + k);
+        bst.insert(k, 'data ' + k);
       });
 
-      console.log(bst.betweenBounds({ $gte: 8, $lte: 12 }));
+      assert.deepEqual(bst.betweenBounds({ $gte: 8, $lte: 15 }), ['data 8', 'data 10', 'data 13', 'data 15']);
+      assert.deepEqual(bst.betweenBounds({ $gt: 8, $lt: 15 }), ['data 10', 'data 13']);
+    });
+
+    it('Bounded search can handle cases where query contains both $lt and $lte, or both $gt and $gte', function () {
+      var bst = new BinarySearchTree();
+
+      [10, 5, 15, 3, 8, 13, 18].forEach(function (k) {
+        bst.insert(k, 'data ' + k);
+      });
+
+      assert.deepEqual(bst.betweenBounds({ $gt:8, $gte: 8, $lte: 15 }), ['data 10', 'data 13', 'data 15']);
+      assert.deepEqual(bst.betweenBounds({ $gt:5, $gte: 8, $lte: 15 }), ['data 8', 'data 10', 'data 13', 'data 15']);
+      assert.deepEqual(bst.betweenBounds({ $gt:8, $gte: 5, $lte: 15 }), ['data 10', 'data 13', 'data 15']);
+
+      assert.deepEqual(bst.betweenBounds({ $gte: 8, $lte: 15, $lt: 15 }), ['data 8', 'data 10', 'data 13']);
+      assert.deepEqual(bst.betweenBounds({ $gte: 8, $lte: 18, $lt: 15 }), ['data 8', 'data 10', 'data 13']);
+      assert.deepEqual(bst.betweenBounds({ $gte: 8, $lte: 15, $lt: 18 }), ['data 8', 'data 10', 'data 13', 'data 15']);
+    });
+
+    it('Bounded search can work when one or both boundaries are missing', function () {
+      var bst = new BinarySearchTree();
+
+      [10, 5, 15, 3, 8, 13, 18].forEach(function (k) {
+        bst.insert(k, 'data ' + k);
+      });
+
+      assert.deepEqual(bst.betweenBounds({ $gte: 11 }), ['data 13', 'data 15', 'data 18']);
+      assert.deepEqual(bst.betweenBounds({ $lte: 9 }), ['data 3', 'data 5', 'data 8']);
     });
 
   });   /// ==== End of 'Search' ==== //
