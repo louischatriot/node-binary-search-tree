@@ -822,6 +822,23 @@ describe('AVL tree', function () {
       assert.deepEqual(avlt.search(15), ['yes']);
     });
 
+    it("Removing falsy values does not delete the entire key", function () {
+      var avlt = new AVLTree();
+
+      avlt.insert(10, 2);
+      avlt.insert(10, 1);
+      assert.deepEqual(avlt.search(10), [2, 1]);
+
+      avlt.delete(10, 2);
+      assert.deepEqual(avlt.search(10), [1]);
+
+      avlt.insert(10, 0);
+      assert.deepEqual(avlt.search(10), [1, 0]);
+
+      avlt.delete(10, 0);
+      assert.deepEqual(avlt.search(10), [1]);
+    });
+
   });   // ==== End of 'Deletion' ==== //
 
 
