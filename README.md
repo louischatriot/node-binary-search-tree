@@ -15,6 +15,8 @@ make test
 ## Usage
 The API mainly provides 3 functions: `insert`, `search` and `delete`. If you do not create a unique-type binary search tree, you can store multiple pieces of data for the same key. Doing so with a unique-type BST will result in an error being thrown. Data is always returned as an array, and you can delete all data relating to a given key, or just one piece of data.
 
+Values inserted can be anything except `undefined`.
+
 ```javascript
 var BinarySearchTree = require('binary-search-tree').BinarySearchTree
   , AVLTree = require('binary-search-tree').AVLTree   // Same API as BinarySearchTree
