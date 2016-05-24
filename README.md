@@ -43,6 +43,9 @@ bst.search(1);    // Equal to []
 // Note the difference between $lt (less than) and $gte (less than OR EQUAL)
 bst.betweenBounds({ $lt: 18, $gte: 12});   // Equal to ['something else', 'some data for key 15']
 
+// Retrieve keys between bounds, sorted as well
+bst.keysBetweenBounds({ $lt: 18, $gte: 12});   // Equal to [12, 15]
+
 // Deleting all the data relating to a key
 bst.delete(15);   // bst.search(15) will now give []
 bst.delete(18, 'world');   // bst.search(18) will now give ['hello']
