@@ -793,7 +793,7 @@ describe('Binary search tree', function () {
   });   // ==== End of 'Deletion' ==== //
 
 
-  it('Can use undefined as key and value', function () {
+  it('Can use undefined as key but not value', function () {
     function compareKeys (a, b) {
       if (a === undefined && b === undefined) { return 0; }
       if (a === undefined) { return -1; }
@@ -806,50 +806,50 @@ describe('Binary search tree', function () {
 
     var bst = new BinarySearchTree({ compareKeys: compareKeys });
 
-    bst.insert(2, undefined);
+    bst.insert(2);
     bst.checkIsBST();
     bst.getNumberOfKeys().should.equal(1);
-    assert.deepEqual(bst.search(2), [undefined]);
+    assert.deepEqual(bst.search(2), []);
     assert.deepEqual(bst.search(undefined), []);
 
     bst.insert(undefined, 'hello');
     bst.checkIsBST();
     bst.getNumberOfKeys().should.equal(2);
-    assert.deepEqual(bst.search(2), [undefined]);
+    assert.deepEqual(bst.search(2), []);
     assert.deepEqual(bst.search(undefined), ['hello']);
 
     bst.insert(undefined, 'world');
     bst.checkIsBST();
     bst.getNumberOfKeys().should.equal(2);
-    assert.deepEqual(bst.search(2), [undefined]);
+    assert.deepEqual(bst.search(2), []);
     assert.deepEqual(bst.search(undefined), ['hello', 'world']);
 
-    bst.insert(4, undefined);
+    bst.insert(4);
     bst.checkIsBST();
     bst.getNumberOfKeys().should.equal(3);
-    assert.deepEqual(bst.search(2), [undefined]);
-    assert.deepEqual(bst.search(4), [undefined]);
+    assert.deepEqual(bst.search(2), []);
+    assert.deepEqual(bst.search(4), []);
     assert.deepEqual(bst.search(undefined), ['hello', 'world']);
 
     bst.delete(undefined, 'hello');
     bst.checkIsBST();
     bst.getNumberOfKeys().should.equal(3);
-    assert.deepEqual(bst.search(2), [undefined]);
-    assert.deepEqual(bst.search(4), [undefined]);
+    assert.deepEqual(bst.search(2), []);
+    assert.deepEqual(bst.search(4), []);
     assert.deepEqual(bst.search(undefined), ['world']);
 
     bst.delete(undefined);
     bst.checkIsBST();
     bst.getNumberOfKeys().should.equal(2);
-    assert.deepEqual(bst.search(2), [undefined]);
-    assert.deepEqual(bst.search(4), [undefined]);
+    assert.deepEqual(bst.search(2), []);
+    assert.deepEqual(bst.search(4), []);
     assert.deepEqual(bst.search(undefined), []);
 
     bst.delete(2, undefined);
     bst.checkIsBST();
     bst.getNumberOfKeys().should.equal(1);
     assert.deepEqual(bst.search(2), []);
-    assert.deepEqual(bst.search(4), [undefined]);
+    assert.deepEqual(bst.search(4), []);
     assert.deepEqual(bst.search(undefined), []);
 
     bst.delete(4);
