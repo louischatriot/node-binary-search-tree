@@ -52,6 +52,21 @@ bst.delete(18, 'world');   // bst.search(18) will now give ['hello']
 
 There are three optional parameters you can pass the BST constructor, allowing you to enforce a key-uniqueness constraint, use a custom function to compare keys and use a custom function to check whether values are equal. These parameters are all passed in an object.
 
+### Browsing throuhg all keys in the tree
+
+You can use `searchAfter` and `searchBefore` to browse through all keys in the tree, like this:
+
+```javascript
+// this assumes that each value in the BST includes 'key' attribute
+var node = bst.search(bst.getMinKey());
+for( ; node.length > 0; node = bst.searchAfter(node[0].key) ) {
+  // do something with each node here
+  // node is now an array of values, as with search()
+}
+```
+
+You can use `getMinKey` and `getMaxKey` to get started from the beginning or the end, or you can also use any other key value as a starting point.
+
 ### Uniqueness
 
 ```javascript

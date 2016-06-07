@@ -412,6 +412,58 @@ describe('Binary search tree', function () {
       bst.search(63).length.should.equal(0);
     });
 
+    it('Can find ascending ordered data in a BST', function () {
+      var bst = new BinarySearchTree()
+        , i;
+
+      customUtils.getRandomArray(100).forEach(function (n) {
+        bst.insert(n, { key: n, value: 'some data for ' + n });
+      });
+
+      bst.checkIsBST();
+
+      var key = bst.getMinKey();
+      key.should.equal(0);
+      for (i = 1; i <= 100; i += 1) {
+        var next = bst.searchAfter(key);
+	if( i == 100 )
+          next.should.deep.equal([]);
+        else {
+          next.length.should.equal(1);
+	  next = next[0];
+	  next.key.should.equal(i);
+          next.key.should.above(key);
+          key = next.key;
+        }
+      }
+    });
+
+    it('Can find descending ordered data in a BST', function () {
+      var bst = new BinarySearchTree()
+        , i;
+
+      customUtils.getRandomArray(100).forEach(function (n) {
+        bst.insert(n, { key: n, value: 'some data for ' + n });
+      });
+
+      bst.checkIsBST();
+
+      var key = bst.getMaxKey();
+      key.should.equal(99);
+      for (i = 1; i <= 100; i += 1) {
+        var next = bst.searchBefore(key);
+	if( i == 100 )
+          next.should.deep.equal([]);
+        else {
+          next.length.should.equal(1);
+	  next = next[0];
+	  next.key.should.equal(99-i);
+          next.key.should.below(key);
+          key = next.key;
+        }
+      }
+    });
+
     it('Can search for data between two bounds', function () {
       var bst = new BinarySearchTree();
 
