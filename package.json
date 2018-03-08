@@ -28,5 +28,5 @@
     "test": "make test"
   },
   "main": "index",
-  "licence": "MIT"
+  "license": "MIT"
 }
