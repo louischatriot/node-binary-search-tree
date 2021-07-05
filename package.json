@@ -18,7 +18,7 @@
     "url": "git@github.com:louischatriot/node-binary-search-tree.git"
   },
   "dependencies": {
-    "underscore": "~1.12.1"
+    "underscore": "~1.13.1"
   },
   "devDependencies": {
     "chai": "1.0.x",
