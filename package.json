@@ -1,21 +1,17 @@
 {
   "name": "binary-search-tree",
-  "version": "0.2.6",
-  "author": {
-    "name": "Louis Chatriot",
-    "email": "louis.chatriot@gmail.com"
-  },
-  "description": "Different binary search tree implementations, including a self-balancing one (AVL)",
+  "version": "0.2.7",
+  "description": "Different binary search tree implementations, including a self-balancing one (AVL). Fork of the original binary-search-tree module but with safer dependencies",
   "keywords": [
     "AVL tree",
     "binary search tree",
     "self-balancing",
     "AVL tree"
   ],
-  "homepage": "https://github.com/louischatriot/node-binary-search-tree",
+  "homepage": "https://github.com/verluci/node-binary-search-tree",
   "repository": {
     "type": "git",
-    "url": "git@github.com:louischatriot/node-binary-search-tree.git"
+    "url": "git@github.com:verluci/node-binary-search-tree.git"
   },
   "devDependencies": {
     "chai": "1.0.x",
@@ -26,5 +22,5 @@
     "test": "make test"
   },
   "main": "index",
-  "licence": "MIT"
+  "license": "MIT"
 }
