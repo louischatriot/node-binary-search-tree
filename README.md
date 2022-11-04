@@ -1,6 +1,6 @@
 # Binary search trees for Node.js
 
-**Note: this module is not actively maintained bar for bug fixes. Its primary use is within NeDB and I do not plan on adding any new features.**
+**Note: This is a fork of the original binary-search-tree. I've forked it because it had security vulnerabilities. I'll probably look at PRs, but not much more. Because I've forked this package I've bumped it to 0.3.0**
 
 Two implementations of binary search tree: <a href="http://en.wikipedia.org/wiki/Binary_search_tree" target="_blank">basic</a> and <a href="http://en.wikipedia.org/wiki/AVL_tree" target="_blank">AVL</a> (a kind of self-balancing binmary search tree). I wrote this module primarily to store indexes for <a href="https://github.com/louischatriot/nedb" target="_blank">NeDB</a> (a javascript dependency-less database).
 
@@ -105,7 +105,7 @@ bst.search(10);   // Returns ['howdoyoudo']
 
 (The MIT License)
 
-Copyright (c) 2013 Louis Chatriot &lt;louis.chatriot@gmail.com&gt;
+Copyright (c) 2022 Coen Visser;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
