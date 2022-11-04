@@ -1,5 +1,5 @@
 {
-  "name": "binary-search-tree",
+  "name": "@verluci/binary-search-tree",
   "version": "0.2.7",
   "description": "Different binary search tree implementations, including a self-balancing one (AVL). Fork of the original binary-search-tree module but with safer dependencies",
   "keywords": [
