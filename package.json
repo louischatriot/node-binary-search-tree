@@ -17,12 +17,10 @@
     "type": "git",
     "url": "git@github.com:louischatriot/node-binary-search-tree.git"
   },
-  "dependencies": {
-    "underscore": "~1.4.4"
-  },
   "devDependencies": {
     "chai": "1.0.x",
-    "mocha": "1.4.x"
+    "mocha": "1.4.x",
+    "underscore": "^1.13.6"
   },
   "scripts": {
     "test": "make test"
